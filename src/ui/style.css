@@ -1,0 +1,28 @@
+:root {
+  --bg: #1b1410;
+  --fg: #e8dcc4;
+  --accent: #c9a24a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.splash {
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  min-height: 100vh;
+  text-align: center;
+  padding: 1rem;
+}
+
+.splash h1 { color: var(--accent); margin: 0; }
+.splash small { opacity: 0.6; }
