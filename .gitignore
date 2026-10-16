@@ -7,6 +7,7 @@ dist/
 public/cards/*
 !public/cards/.gitkeep
 
-# Música de fundo: cada um coloca a sua (não versionada)
+# Música de fundo: só a trilha do projeto é versionada
 public/music/*
 !public/music/.gitkeep
+!public/music/theme.mp3

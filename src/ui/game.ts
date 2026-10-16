@@ -310,11 +310,11 @@ function showPreview(card: CardDef | null) {
   preview.append(big);
   preview.insertAdjacentHTML(
     'beforeend',
-    `<h3>${card.name}</h3>
+    `<div class="preview__text"><h3>${card.name}</h3>
      <p class="preview__meta">${FACTION_NAMES[card.faction]} · ${kind}</p>
      ${card.type === 'leader' ? `<p class="preview__leader">${LEADER_TEXT[card.id] ?? ''}</p>` : ''}
      ${abilities ? `<ul class="preview__abilities">${abilities}</ul>` : ''}
-     <p class="preview__flavor">“${card.flavor}”</p>`,
+     <p class="preview__flavor">“${card.flavor}”</p></div>`,
   );
 }
 
@@ -332,17 +332,17 @@ function playerPanel(p: PlayerId): string {
   const lead = score(g, p) > score(g, p === ME ? AI : ME);
   return `
     <div class="player player--${sideName(p)} ${actor() === p && g.winner === null ? 'is-turn' : ''}">
-      <div class="player__leader" data-leader="${p}"></div>
+      <div class="player__portrait" style="background-image:url('${getCard(P.leader).art}')"></div>
       <div class="player__info">
         <strong>${p === ME ? 'Você' : 'Oponente'}</strong>
         <small>${FACTION_NAMES[P.faction]}</small>
         <div class="player__stats">
-          <span class="handcount" title="Cartas na mão">${P.hand.length}</span>
-          <span class="gems">${gems}</span>
-          ${P.passed ? '<span class="tag">Passou</span>' : ''}
+          <span class="handcount" title="Cartas na mão"><i></i>${P.hand.length}</span>
+          <span class="gems" title="Vidas">${gems}</span>
         </div>
       </div>
       <div class="player__total ${lead ? 'lead' : ''}">${score(g, p)}</div>
+      ${P.passed ? '<div class="player__passed">Passou!</div>' : ''}
     </div>`;
 }
 
@@ -356,29 +356,31 @@ function render(overrides?: Map<string, DOMRect>) {
   const selCard = ui.selected !== null ? g.players[ME].hand.find((c) => c.uid === ui.selected) : undefined;
 
   root.innerHTML = `
-    <div class="board">
-      <aside class="side">
+    <div class="board faction-${g.players[ME].faction}">
+      <aside class="left">
+        <div class="leader-slot leader-slot--op" data-leader="${AI}"></div>
         ${playerPanel(AI)}
         <div class="weather" title="Clima"></div>
         ${playerPanel(ME)}
+        <div class="leader-slot leader-slot--me" data-leader="${ME}"></div>
+      </aside>
+      <section class="field ${targets[0]?.kind === 'instant' ? 'is-instant-target' : ''}">
+        <div class="rows rows--op"></div>
+        <div class="status"><span>Rodada ${g.round}</span>${ui.log}</div>
+        <div class="rows rows--me"></div>
+        <div class="hand"></div>
+      </section>
+      <aside class="right">
+        <div class="piles piles--op"></div>
+        <div class="preview"></div>
+        <div class="piles piles--me"></div>
         <div class="actions">
-          <button class="btn" data-action="pass" ${myTurn() && !g.pending ? '' : 'disabled'}>Passar</button>
+          <button class="btn btn--pass" data-action="pass" ${myTurn() && !g.pending ? '' : 'disabled'}>Passar</button>
           <div class="actions__row">
             <button class="btn btn--ghost btn--small" data-action="restart">Nova partida</button>
             ${musicButton()}
           </div>
         </div>
-      </aside>
-      <section class="field ${targets[0]?.kind === 'instant' ? 'is-instant-target' : ''}">
-        <div class="rows rows--op"></div>
-        <div class="status">Rodada ${g.round} · ${ui.log}</div>
-        <div class="rows rows--me"></div>
-        <div class="hand"></div>
-      </section>
-      <aside class="info">
-        <div class="piles piles--op"></div>
-        <div class="preview"></div>
-        <div class="piles piles--me"></div>
       </aside>
     </div>`;
 
@@ -452,8 +454,8 @@ function render(overrides?: Map<string, DOMRect>) {
     const top = P.discard[P.discard.length - 1];
     const piles = root.querySelector(`.piles--${sideName(p)}`)!;
     piles.innerHTML = `
-      <div class="pile"><div class="discard"></div><small>Descarte ${P.discard.length}</small></div>
-      <div class="pile"><div class="cardback"><span>${P.deck.length}</span></div><small>Baralho</small></div>`;
+      <div class="pile pile--discard" title="Descarte"><div class="discard"></div><span class="pile__count">${P.discard.length}</span></div>
+      <div class="pile pile--deck" title="Baralho"><div class="cardback cardback--${P.faction}"></div><span class="pile__count">${P.deck.length}</span></div>`;
     if (top) piles.querySelector('.discard')!.append(view(top));
   }
 
@@ -474,7 +476,7 @@ function render(overrides?: Map<string, DOMRect>) {
       if (hint) { origins.delete(el.dataset.uid!); return root.querySelector(hint); }
       return el.closest('.hand')
         ? root.querySelector('.piles--me .cardback')
-        : root.querySelector(`.player--${sideName(ui.lastActor)} .player__leader`);
+        : root.querySelector(`.leader-slot--${sideName(ui.lastActor)}`);
     },
     exit: (owner) => root.querySelector(`.piles--${owner ?? 'me'} .discard`),
   });

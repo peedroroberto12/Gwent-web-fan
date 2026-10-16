@@ -56,13 +56,11 @@ Depois: demais facções, editor de baralho, IA mais forte, multiplayer.
 
 ## Música de fundo
 
-O jogo não inclui música. Para ter trilha em loop, coloque o seu próprio arquivo em:
+A trilha *High Stakes at the Hearth* (`public/music/theme.mp3`) foi gerada por IA para o projeto e é livre de direitos. Ela toca em loop a partir do primeiro clique e pode ser desligada no botão ♪. Para trocar, substitua o arquivo (aceita `.mp3` ou `.ogg`).
 
-```
-public/music/theme.mp3   (ou theme.ogg)
-```
+## Visual
 
-A pasta fica fora do Git. A música começa no primeiro clique e pode ser desligada no botão ♪.
+Layout inspirado no tabuleiro do Witcher 3, desenhado inteiramente em CSS (sem texturas do jogo). Fontes livres embutidas: Alegreya Sans e Alegreya SC (SIL Open Font License).
 
 ## Lançar uma versão
 
