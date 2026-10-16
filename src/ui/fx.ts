@@ -219,3 +219,114 @@ export function returnGhost(ghost: HTMLElement, to: DOMRect | undefined) {
   );
   anim.onfinish = () => ghost.remove();
 }
+
+// ---------------------------------------------------------------- destaque de habilidade
+
+const TONES: Record<string, string> = {
+  spy: '#a77be0',
+  medic: '#62c96f',
+  muster: '#e3a242',
+  tight_bond: '#f0cf7a',
+  morale: '#f39a4b',
+  horn: '#f5d76e',
+  decoy: '#c09468',
+  scorch: '#ff5a2a',
+  scorch_close: '#ff5a2a',
+  weather_frost: '#8cc8ff',
+  weather_fog: '#cfd3d8',
+  weather_rain: '#6a86e0',
+  weather_clear: '#ffe9a0',
+  leader: '#f0cf7a',
+  round: '#f0cf7a',
+};
+
+const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+/**
+ * Mostra uma carta grande no centro da tela por um instante, com raios girando,
+ * um anel de luz e faíscas na cor da habilidade. Sem carta, mostra só a faixa
+ * (usado para fim de rodada). Resolve quando a animação termina.
+ */
+export async function spotlight(opts: { card?: HTMLElement; title: string; subtitle?: string; tone: string }) {
+  const tone = TONES[opts.tone] ?? TONES.leader!;
+  const el = document.createElement('div');
+  el.className = `spot ${opts.card ? '' : 'spot--banner'}`;
+  el.style.setProperty('--tone', tone);
+  el.innerHTML = `
+    <div class="spot__backdrop"></div>
+    <div class="spot__rays"></div>
+    <div class="spot__stage">
+      <div class="spot__ring"></div>
+      <div class="spot__card"></div>
+      <div class="spot__label"><strong>${opts.title}</strong>${opts.subtitle ? `<span>${opts.subtitle}</span>` : ''}</div>
+    </div>`;
+  if (opts.card) {
+    opts.card.classList.add('card--spot');
+    el.querySelector('.spot__card')!.append(opts.card);
+  }
+  fxLayer().append(el);
+
+  if (reduced()) {
+    await el.animate([{ opacity: 0 }, { opacity: 1, offset: 0.2 }, { opacity: 1, offset: 0.8 }, { opacity: 0 }], { duration: 900 }).finished;
+    el.remove();
+    return;
+  }
+
+  const total = opts.card ? 1250 : 1500;
+  const stage = el.querySelector<HTMLElement>('.spot__stage')!;
+  el.querySelector('.spot__backdrop')!.animate(
+    [{ opacity: 0 }, { opacity: 1, offset: 0.15 }, { opacity: 1, offset: 0.8 }, { opacity: 0 }],
+    { duration: total, fill: 'both' },
+  );
+  el.querySelector('.spot__rays')!.animate(
+    [
+      { opacity: 0, transform: 'translate(-50%,-50%) rotate(0deg) scale(.6)' },
+      { opacity: 0.9, offset: 0.2 },
+      { opacity: 0.7, offset: 0.75 },
+      { opacity: 0, transform: 'translate(-50%,-50%) rotate(70deg) scale(1.25)' },
+    ],
+    { duration: total, fill: 'both', easing: 'ease-out' },
+  );
+  el.querySelector('.spot__ring')!.animate(
+    [
+      { transform: 'translate(-50%,-50%) scale(.2)', opacity: 1 },
+      { transform: 'translate(-50%,-50%) scale(2.6)', opacity: 0 },
+    ],
+    { duration: 700, delay: 120, easing: 'cubic-bezier(.1,.7,.3,1)', fill: 'both' },
+  );
+  stage.animate(
+    [
+      { transform: 'scale(.35) rotate(-8deg)', opacity: 0 },
+      { transform: 'scale(1.08) rotate(1deg)', opacity: 1, offset: 0.18 },
+      { transform: 'scale(1)', opacity: 1, offset: 0.28 },
+      { transform: 'scale(1.02)', opacity: 1, offset: 0.8 },
+      { transform: 'scale(1.18)', opacity: 0 },
+    ],
+    { duration: total, easing: 'ease-out', fill: 'both' },
+  );
+
+  // faíscas estourando para fora, na cor da habilidade
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  for (let i = 0; i < 26; i++) {
+    const s = document.createElement('span');
+    s.className = 'fx-spark';
+    s.style.left = `${cx}px`;
+    s.style.top = `${cy}px`;
+    s.style.background = tone;
+    s.style.boxShadow = `0 0 8px 2px ${tone}`;
+    fxLayer().append(s);
+    const ang = (i / 26) * Math.PI * 2 + Math.random() * 0.3;
+    const dist = 140 + Math.random() * 160;
+    s.animate(
+      [
+        { transform: 'translate(-50%,-50%) scale(1.2)', opacity: 1 },
+        { transform: `translate(${Math.cos(ang) * dist - 2.5}px, ${Math.sin(ang) * dist - 2.5}px) scale(.2)`, opacity: 0 },
+      ],
+      { duration: 650 + Math.random() * 400, delay: 140, easing: 'cubic-bezier(.1,.8,.3,1)', fill: 'both' },
+    ).onfinish = () => s.remove();
+  }
+
+  await wait(total);
+  el.remove();
+}

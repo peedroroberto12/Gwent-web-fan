@@ -6,3 +6,7 @@ dist/
 # Imagens das cartas são baixadas por script, não versionadas
 public/cards/*
 !public/cards/.gitkeep
+
+# Música de fundo: cada um coloca a sua (não versionada)
+public/music/*
+!public/music/.gitkeep

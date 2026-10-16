@@ -32,7 +32,7 @@ src/
   data/     definições de cartas, facções e baralhos
   ai/       oponente controlado pelo computador
   ui/       interface (tabuleiro, cartas, animações)
-tests/      testes automatizados
+tests/      testes do motor e da IA
 scripts/    utilitários (ex: baixar imagens das cartas)
 public/cards/  imagens das cartas (não versionadas)
 ```
@@ -52,7 +52,17 @@ Artes e dados vêm do repositório [API-Gwent](https://github.com/day-s-ea/API-G
 
 Depois: demais facções, editor de baralho, IA mais forte, multiplayer.
 
-> Estado atual: **protótipo de interface** jogável com regras simplificadas (clima, trompa, vínculo, moral, espião, queimar). O motor de regras completo vem a seguir.
+> Estado atual: motor de regras completo e testado (todas as habilidades de carta, 19 dos 20 líderes e as habilidades de facção) e partida jogável contra a IA.
+
+## Música de fundo
+
+O jogo não inclui música. Para ter trilha em loop, coloque o seu próprio arquivo em:
+
+```
+public/music/theme.mp3   (ou theme.ogg)
+```
+
+A pasta fica fora do Git. A música começa no primeiro clique e pode ser desligada no botão ♪.
 
 ## Lançar uma versão
 

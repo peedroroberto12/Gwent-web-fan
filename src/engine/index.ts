@@ -1,7 +1,8 @@
-// Motor de regras: lógica pura, sem DOM.
-// Contrato que a UI e a IA vão usar:
-//   legalMoves(state)        -> jogadas possíveis
-//   applyMove(state, move)   -> novo estado (imutável)
-// Implementação vem na próxima etapa.
-
+// Motor de regras: lógica pura, sem DOM. A UI e a IA usam só o que está exportado aqui.
 export const VERSION = '0.1.0';
+
+export * from './types';
+export { createGame, defaultDeck, factionLeaders, type GameOptions } from './setup';
+export { applyMove, canUseLeader, legalMoves, musterGroup, pendingOptions } from './rules';
+export { def, isHero, rowScore, rowStrengths, score, weatherRows } from './score';
+export { leaderAbility, LEADERS, type LeaderAbility } from './leaders';

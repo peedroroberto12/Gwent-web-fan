@@ -102,3 +102,27 @@ export const WEATHER_ROW: Partial<Record<Ability, Row>> = {
   weather_fog: 'ranged',
   weather_rain: 'siege',
 };
+
+/** O que cada líder faz, em português. */
+export const LEADER_TEXT: Record<string, string> = {
+  'foltest-king-of-temeria': 'Tira uma Névoa Impenetrável do baralho e joga na hora.',
+  'foltest-lord-commander-of-the-north': 'Remove todos os efeitos de clima.',
+  'foltest-son-of-medell': 'Destrói a(s) unidade(s) à distância mais forte(s) do inimigo se a fileira dele somar 10 ou mais.',
+  'foltest-the-siegemaster': 'Dobra a força das suas unidades de cerco (se a fileira ainda não tiver trompa).',
+  'foltest-the-steel-forged': 'Destrói a(s) unidade(s) de cerco mais forte(s) do inimigo se a fileira dele somar 10 ou mais.',
+  'emhyr-var-emreis-emperor-of-nilfgaard': 'Revela 3 cartas aleatórias da mão do oponente.',
+  'emhyr-var-emreis-his-imperial-majesty': 'Tira uma Chuva Torrencial do baralho e joga na hora.',
+  'emhyr-var-emreis-invader-of-the-north': 'Passivo: médicos (dos dois lados) revivem uma unidade aleatória.',
+  'emhyr-var-emreis-the-relentless': 'Pega uma carta do descarte do oponente para a sua mão.',
+  'emhyr-var-emreis-the-white-flame': 'Passivo: cancela a habilidade do líder do oponente.',
+  'eredin-breacc-glas-the-treacherous': 'Passivo: dobra a força de todos os espiões.',
+  'eredin-bringer-of-death': 'Devolve uma carta do seu descarte para a mão.',
+  'eredin-commander-of-the-red-riders': 'Dobra a força das suas unidades corpo a corpo (se a fileira ainda não tiver trompa).',
+  'eredin-destroyer-of-worlds': 'Descarta 2 cartas e escolhe 1 do baralho. (Ainda não implementado.)',
+  'eredin-king-of-the-wild-hunt': 'Escolhe qualquer clima do baralho e joga na hora.',
+  'francesca-findabair-daisy-of-the-valley': 'Passivo: começa a partida com uma carta a mais.',
+  'francesca-findabair-hope-of-the-aen-seidhe': 'Move as unidades ágeis para a fileira onde valem mais.',
+  'francesca-findabair-pureblood-elf': 'Tira uma Geada Cortante do baralho e joga na hora.',
+  'francesca-findabair-queen-of-dol-blathanna': 'Destrói a(s) unidade(s) corpo a corpo mais forte(s) do inimigo se a fileira dele somar 10 ou mais.',
+  'francesca-findabair-the-beautiful': 'Dobra a força das suas unidades à distância (se a fileira ainda não tiver trompa).',
+};
