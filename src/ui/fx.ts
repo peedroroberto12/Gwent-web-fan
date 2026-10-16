@@ -72,7 +72,7 @@ export function animate(root: ParentNode, before: Snapshot, opts: AnimateOptions
     const snap = before.get(uid);
     if (snap && effects.get(Number(uid)) === 'burn') {
       burn(makeGhost(snap), snap.rect);
-      el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 1000, fill: 'backwards' });
+      el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 1600, fill: 'backwards' });
       return;
     }
 
@@ -86,7 +86,7 @@ export function animate(root: ParentNode, before: Snapshot, opts: AnimateOptions
             { transform: `translate(${dx}px, ${dy}px) scale(${s})`, zIndex: 50 },
             { transform: 'none', zIndex: 50 },
           ],
-          { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' },
+          { duration: 750, easing: 'cubic-bezier(.25,.7,.25,1)' },
         );
       }
       // força mudou: o número dá um "pulo"
@@ -94,8 +94,8 @@ export function animate(root: ParentNode, before: Snapshot, opts: AnimateOptions
       const num = el.querySelector<HTMLElement>('.card__strength');
       if (num && oldStr !== undefined && num.textContent !== oldStr) {
         num.animate(
-          [{ transform: 'translate(-50%,-50%) scale(1.9)' }, { transform: 'translate(-50%,-50%) scale(1)' }],
-          { duration: 450, easing: 'cubic-bezier(.3,1.6,.5,1)' },
+          [{ transform: 'translate(-50%,-50%) scale(1.5)' }, { transform: 'translate(-50%,-50%) scale(1)' }],
+          { duration: 700, easing: 'cubic-bezier(.3,1.4,.5,1)' },
         );
       }
       return;
@@ -103,7 +103,7 @@ export function animate(root: ParentNode, before: Snapshot, opts: AnimateOptions
 
     // carta nova: voa da origem (baralho / painel do oponente)
     const src = opts.origin(el)?.getBoundingClientRect();
-    const delay = enterIndex++ * 45;
+    const delay = enterIndex++ * 110;
     if (src) {
       const dx = src.left + src.width / 2 - (to.left + to.width / 2);
       const dy = src.top + src.height / 2 - (to.top + to.height / 2);
@@ -113,11 +113,11 @@ export function animate(root: ParentNode, before: Snapshot, opts: AnimateOptions
           { opacity: 1, offset: 0.25 },
           { transform: 'none', opacity: 1, zIndex: 50 },
         ],
-        { duration: 520, delay, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' },
+        { duration: 850, delay, easing: 'cubic-bezier(.25,.7,.25,1)', fill: 'backwards' },
       );
     } else {
-      el.animate([{ transform: 'scale(.6)', opacity: 0 }, { transform: 'none', opacity: 1 }], {
-        duration: 300,
+      el.animate([{ transform: 'scale(.85)', opacity: 0 }, { transform: 'none', opacity: 1 }], {
+        duration: 500,
         delay,
         fill: 'backwards',
       });
@@ -132,7 +132,7 @@ export function animate(root: ParentNode, before: Snapshot, opts: AnimateOptions
     if (effects.get(Number(uid)) === 'burn') {
       burn(ghost, snap.rect);
     } else {
-      flyAway(ghost, snap.rect, opts.exit(snap.owner)?.getBoundingClientRect(), exitIndex++ * 35);
+      flyAway(ghost, snap.rect, opts.exit(snap.owner)?.getBoundingClientRect(), exitIndex++ * 80);
     }
   }
 }
@@ -163,7 +163,7 @@ function flyAway(ghost: HTMLElement, from: DOMRect, to: DOMRect | undefined, del
         },
       ]
     : [{ opacity: 1 }, { opacity: 0, transform: 'scale(.7)' }];
-  const anim = ghost.animate(frames, { duration: 560, delay, easing: 'cubic-bezier(.5,0,.3,1)', fill: 'both' });
+  const anim = ghost.animate(frames, { duration: 900, delay, easing: 'cubic-bezier(.45,0,.3,1)', fill: 'both' });
   anim.onfinish = () => ghost.remove();
 }
 
@@ -177,7 +177,7 @@ function burn(ghost: HTMLElement, rect: DOMRect) {
       { filter: 'brightness(.6) sepia(1) saturate(3) hue-rotate(-30deg)', offset: 0.6 },
       { filter: 'brightness(.1) grayscale(1) blur(2px)', transform: 'scale(.8) translateY(-14px)', opacity: 0 },
     ],
-    { duration: 1100, easing: 'ease-in', fill: 'both' },
+    { duration: 1700, easing: 'ease-in', fill: 'both' },
   );
   anim.onfinish = () => ghost.remove();
 
@@ -197,7 +197,7 @@ function burn(ghost: HTMLElement, rect: DOMRect) {
           { transform: 'translate(0,0) scale(1)', opacity: 1 },
           { transform: `translate(${dx}px, ${dy}px) scale(.2)`, opacity: 0 },
         ],
-        { duration: 700 + Math.random() * 600, delay: 150 + Math.random() * 300, easing: 'ease-out', fill: 'both' },
+        { duration: 1100 + Math.random() * 700, delay: 250 + Math.random() * 450, easing: 'ease-out', fill: 'both' },
       )
       .onfinish = () => spark.remove();
   }
@@ -215,7 +215,7 @@ export function returnGhost(ghost: HTMLElement, to: DOMRect | undefined) {
         rotate: '0deg',
       },
     ],
-    { duration: 320, easing: 'cubic-bezier(.3,1.3,.5,1)', fill: 'both' },
+    { duration: 450, easing: 'cubic-bezier(.3,1.2,.5,1)', fill: 'both' },
   );
   anim.onfinish = () => ghost.remove();
 }
@@ -272,13 +272,14 @@ export async function spotlight(opts: { card?: HTMLElement; title: string; subti
     return;
   }
 
-  const total = opts.card ? 1250 : 1500;
+  const total = opts.card ? 1250 : 2200;
+  if (!opts.card) el.querySelector('.spot__rays')!.remove();
   const stage = el.querySelector<HTMLElement>('.spot__stage')!;
   el.querySelector('.spot__backdrop')!.animate(
     [{ opacity: 0 }, { opacity: 1, offset: 0.15 }, { opacity: 1, offset: 0.8 }, { opacity: 0 }],
     { duration: total, fill: 'both' },
   );
-  el.querySelector('.spot__rays')!.animate(
+  el.querySelector('.spot__rays')?.animate(
     [
       { opacity: 0, transform: 'translate(-50%,-50%) rotate(0deg) scale(.6)' },
       { opacity: 0.9, offset: 0.2 },
@@ -287,7 +288,7 @@ export async function spotlight(opts: { card?: HTMLElement; title: string; subti
     ],
     { duration: total, fill: 'both', easing: 'ease-out' },
   );
-  el.querySelector('.spot__ring')!.animate(
+  if (opts.card) el.querySelector('.spot__ring')!.animate(
     [
       { transform: 'translate(-50%,-50%) scale(.2)', opacity: 1 },
       { transform: 'translate(-50%,-50%) scale(2.6)', opacity: 0 },
@@ -305,10 +306,10 @@ export async function spotlight(opts: { card?: HTMLElement; title: string; subti
     { duration: total, easing: 'ease-out', fill: 'both' },
   );
 
-  // faíscas estourando para fora, na cor da habilidade
+  // faíscas estourando para fora, na cor da habilidade (só no destaque de carta)
   const cx = window.innerWidth / 2;
   const cy = window.innerHeight / 2;
-  for (let i = 0; i < 26; i++) {
+  for (let i = 0; i < (opts.card ? 26 : 0); i++) {
     const s = document.createElement('span');
     s.className = 'fx-spark';
     s.style.left = `${cx}px`;
@@ -329,4 +330,90 @@ export async function spotlight(opts: { card?: HTMLElement; title: string; subti
 
   await wait(total);
   el.remove();
+}
+
+// ---------------------------------------------------------------- efeito na própria carta
+
+/**
+ * Efeito pequeno quando uma habilidade é usada: a carta brilha na cor da habilidade,
+ * um anel se expande ao redor dela, algumas faíscas sobem e o nome da habilidade
+ * flutua acima. Fica no lugar da carta, sem cobrir o tabuleiro.
+ */
+export async function cardEffect(el: Element | null, tone: string, label: string) {
+  const color = TONES[tone] ?? TONES.leader!;
+  if (!el) return;
+  const r = el.getBoundingClientRect();
+  if (!r.width) return;
+  if (reduced()) {
+    await wait(500);
+    return;
+  }
+
+  const dur = 1500;
+  const card = el as HTMLElement;
+  card.animate(
+    [
+      { transform: 'scale(1)', boxShadow: `0 0 0 0 ${color}` },
+      { transform: 'scale(1.1)', boxShadow: `0 0 0 3px ${color}, 0 0 22px ${color}`, offset: 0.3 },
+      { transform: 'scale(1.1)', boxShadow: `0 0 0 3px ${color}, 0 0 22px ${color}`, offset: 0.65 },
+      { transform: 'scale(1)', boxShadow: `0 0 0 0 transparent` },
+    ],
+    { duration: dur, easing: 'ease-in-out' },
+  );
+
+  const layer = fxLayer();
+  const cx = r.left + r.width / 2;
+  const cy = r.top + r.height / 2;
+
+  const ring = document.createElement('div');
+  ring.className = 'fx-ring';
+  Object.assign(ring.style, { left: `${cx}px`, top: `${cy}px`, width: `${r.width * 1.1}px`, borderColor: color, boxShadow: `0 0 14px ${color}` });
+  layer.append(ring);
+  ring.animate(
+    [
+      { transform: 'translate(-50%,-50%) scale(.6)', opacity: 0 },
+      { opacity: 0.9, offset: 0.2 },
+      { transform: 'translate(-50%,-50%) scale(1.7)', opacity: 0 },
+    ],
+    { duration: 1200, delay: 150, easing: 'cubic-bezier(.2,.6,.3,1)', fill: 'both' },
+  ).onfinish = () => ring.remove();
+
+  const tag = document.createElement('div');
+  tag.className = 'fx-label';
+  tag.textContent = label;
+  Object.assign(tag.style, { left: `${cx}px`, top: `${r.top}px`, color });
+  layer.append(tag);
+  tag.animate(
+    [
+      { transform: 'translate(-50%, 0)', opacity: 0 },
+      { transform: 'translate(-50%, -110%)', opacity: 1, offset: 0.25 },
+      { transform: 'translate(-50%, -130%)', opacity: 1, offset: 0.75 },
+      { transform: 'translate(-50%, -160%)', opacity: 0 },
+    ],
+    { duration: dur + 300, easing: 'ease-out', fill: 'both' },
+  ).onfinish = () => tag.remove();
+
+  for (let i = 0; i < 10; i++) {
+    const sp = document.createElement('span');
+    sp.className = 'fx-spark';
+    Object.assign(sp.style, {
+      left: `${r.left + Math.random() * r.width}px`,
+      top: `${r.top + r.height * (0.4 + Math.random() * 0.5)}px`,
+      background: color,
+      boxShadow: `0 0 6px 2px ${color}`,
+      width: '4px',
+      height: '4px',
+    });
+    layer.append(sp);
+    sp.animate(
+      [
+        { transform: 'translate(0,0)', opacity: 0 },
+        { opacity: 1, offset: 0.2 },
+        { transform: `translate(${(Math.random() - 0.5) * 30}px, ${-30 - Math.random() * 50}px)`, opacity: 0 },
+      ],
+      { duration: 1000 + Math.random() * 500, delay: 200 + Math.random() * 400, easing: 'ease-out', fill: 'both' },
+    ).onfinish = () => sp.remove();
+  }
+
+  await wait(dur);
 }

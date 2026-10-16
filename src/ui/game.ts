@@ -31,7 +31,8 @@ import {
   type PlayerId,
 } from '../engine';
 import { cardView } from './cardView';
-import { animate, returnGhost, snapshot, spotlight, type Effect } from './fx';
+import { animate, cardEffect, returnGhost, snapshot, spotlight, type Effect } from './fx';
+import { playAbility, playCard, playRound, sfxButton, toggleSfx } from './sfx';
 import type { MatchSetup } from './deckbuilder';
 import { musicButton, onMusicChange, toggleMusic } from './music';
 
@@ -59,6 +60,7 @@ let session = 0;
 
 function newGame() {
   session++;
+  playCard('shuffle', 0.6);
   g = createGame({
     factions: [setup.me.faction, setup.cpu.faction],
     leaders: [setup.me.leader, setup.cpu.leader],
@@ -141,21 +143,24 @@ async function dispatch(move: Move, overrides?: Map<string, DOMRect>) {
 
   ui.busy = true;
   render(overrides);
+  playEventSounds(events);
 
-  // destaques: uma carta por vez, grande no centro
+  // efeitos de habilidade: pequenos, na própria carta, um de cada vez,
+  // depois que a carta termina de chegar ao lugar
+  const abilities = events.filter((e) => e.type === 'ability');
+  if (abilities.length && events.some((e) => e.type === 'play')) await wait(700);
   for (const e of events) {
+    if (mySession !== session) return;
     if (e.type === 'ability') {
-      const card = cardView(getCard(e.cardId));
-      const ability = e.ability;
-      await spotlight({
-        card,
-        tone: ability,
-        title: ability === 'leader' ? 'Habilidade do líder' : ABILITY_NAMES[ability],
-        subtitle: ability === 'leader' ? LEADER_TEXT[e.cardId] : `${who(e.player)} · ${name(e.cardId)}`,
-      });
+      const el = e.ability === 'leader'
+        ? root.querySelector(`.leader-slot--${sideName(e.player)} .card`)
+        : root.querySelector(`.card[data-uid="${e.uid}"]`);
+      playAbility(e.ability);
+      await cardEffect(el, e.ability, e.ability === 'leader' ? 'Líder' : ABILITY_NAMES[e.ability]);
     }
     if (e.type === 'round') {
-      const t = e.winner === 'draw' ? 'Empate!' : e.winner === ME ? 'Rodada sua!' : 'Rodada do oponente';
+      playRound(e.winner === 'draw' ? 'draw' : e.winner === ME ? 'win' : 'lose');
+      const t = e.winner === 'draw' ? 'Empate' : e.winner === ME ? 'Rodada sua' : 'Rodada do oponente';
       await spotlight({ title: t, subtitle: `${e.scores[0]} × ${e.scores[1]}`, tone: 'round' });
     }
   }
@@ -166,10 +171,40 @@ async function dispatch(move: Move, overrides?: Map<string, DOMRect>) {
   next();
 }
 
+const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+/** Sons físicos de carta para cada evento (em sequência quando são vários). */
+function playEventSounds(events: GameEvent[]) {
+  let t = 0;
+  for (const e of events) {
+    switch (e.type) {
+      case 'play':
+        playCard('place', 0.6, t);
+        t += e.from === 'hand' ? 0 : 140; // convocar: um "toc" por carta
+        break;
+      case 'draw':
+        e.uids.forEach((_, i) => playCard('slide', 0.45, t + i * 160));
+        break;
+      case 'redraw':
+      case 'discard':
+      case 'return':
+        playCard('shove', 0.5, t);
+        break;
+      case 'pass':
+        playCard('chip', 0.5, t);
+        break;
+      case 'round':
+        playCard('fan', 0.5, t + 200);
+        break;
+    }
+  }
+}
+
 function next() {
   if (g.winner !== null || ui.reveal) return;
   const mySession = session;
-  if (actor() === AI) setTimeout(() => { if (mySession === session) void dispatch(chooseMove(g, AI)); }, 650);
+  // a IA "pensa" um pouco antes de jogar, para o ritmo não ficar atropelado
+  if (actor() === AI) setTimeout(() => { if (mySession === session) void dispatch(chooseMove(g, AI)); }, 1300);
 }
 
 // ---------------------------------------------------------------- alvos de jogada
@@ -395,10 +430,11 @@ function render(overrides?: Map<string, DOMRect>) {
         <div class="piles piles--me"></div>
         <div class="actions">
           <button class="btn btn--pass" data-action="pass" ${myTurn() && !g.pending ? '' : 'disabled'}>Passar</button>
-          <div class="actions__row actions__row--3">
+          <div class="actions__row">
             <button class="btn btn--ghost btn--small" data-action="restart">Recomeçar</button>
             <button class="btn btn--ghost btn--small" data-action="decks">Baralhos</button>
             ${musicButton()}
+            ${sfxButton()}
           </div>
         </div>
       </aside>
@@ -487,6 +523,7 @@ function render(overrides?: Map<string, DOMRect>) {
   root.querySelector('[data-action="pass"]')!.addEventListener('click', () => { if (myTurn()) void dispatch({ type: 'pass' }); });
   root.querySelector('[data-action="restart"]')!.addEventListener('click', () => { newGame(); render(); next(); });
   root.querySelector('[data-action="music"]')?.addEventListener('click', toggleMusic);
+  root.querySelector('[data-action="sfx"]')!.addEventListener('click', () => { toggleSfx(); render(); });
   root.querySelector('[data-action="decks"]')!.addEventListener('click', leave);
 
   animate(root, before, {

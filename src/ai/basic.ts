@@ -7,6 +7,7 @@ import {
   def,
   legalMoves,
   pendingOptions,
+  rowScore,
   score,
   type GameState,
   type Move,
@@ -83,6 +84,57 @@ function chooseRedraw(s: GameState, me: PlayerId): Move {
   return worst && worst.v <= 3 ? { type: 'redraw', uid: worst.uid } : { type: 'keep' };
 }
 
+/**
+ * Penalidade por desperdiçar uma habilidade: a jogada até pode render pontos agora,
+ * mas a carta valeria mais guardada. Zero quando a habilidade tem efeito útil.
+ */
+function wastePenalty(s: GameState, next: GameState, m: Move, me: PlayerId): number {
+  const opp = other(me);
+  const lastLife = s.players[me].gems === 1;
+  const myDelta = score(next, me) - score(s, me);
+  const oppDelta = score(next, opp) - score(s, opp);
+
+  if (m.type === 'leader') {
+    // líder é usado uma vez: só vale se mudar bem o placar (ou se for a última rodada)
+    const gain = myDelta - oppDelta + (next.players[me].hand.length - s.players[me].hand.length) * 3;
+    return gain < 5 && !lastLife ? 6 : 0;
+  }
+  if (m.type !== 'play') return 0;
+  const card = s.players[me].hand.find((c) => c.uid === m.uid);
+  if (!card) return 0;
+  const d = def(card);
+  const has = (a: string) => d.abilities.includes(a as never);
+
+  // médico (inclusive Yennefer) sem ninguém para reviver
+  if (has('medic') && !s.players[me].discard.some((c) => def(c).type === 'unit')) return lastLife ? 2 : 7;
+
+  // isca: vale para recuperar espião, médico com alvo, ou proteger carta forte; não à toa
+  if (has('decoy') && m.target !== undefined) {
+    const t = Object.values(s.players[me].rows).flat().find((c) => c.uid === m.target);
+    if (!t) return 5;
+    const td = def(t);
+    if (td.abilities.includes('spy')) return 0;
+    if (td.abilities.includes('medic') && s.players[me].discard.some((c) => def(c).type === 'unit')) return 0;
+    return (td.strength ?? 0) >= 6 ? 3 : 6;
+  }
+
+  // queimar: só se o oponente perder mais do que eu
+  if (has('scorch')) return -oppDelta <= -myDelta ? 10 : 0;
+
+  // Villentretenmerth sem disparar o efeito: melhor guardar para quando disparar
+  if (has('scorch_close') && rowScore(s, opp, 'close') < 10) return lastLife ? 0 : 3;
+
+  // clima: o oponente tem que perder mais do que eu
+  if (d.type === 'weather' && !has('weather_clear')) return -oppDelta <= -myDelta ? 8 : 0;
+  if (has('weather_clear')) return myDelta <= oppDelta ? 8 : 0;
+
+  // trompa especial: só numa fileira que já tenha força
+  if (d.type === 'special' && has('horn')) return myDelta < 6 ? 5 : 0;
+
+  // espiões cedo são bons; mais tarde, quando o placar aperta, custam caro
+  return 0;
+}
+
 export function chooseMove(s: GameState, me: PlayerId): Move {
   if (s.phase === 'first') return { type: 'first', player: other(me) }; // jogar em segundo é vantagem
   if (s.phase === 'redraw') return chooseRedraw(s, me);
@@ -108,7 +160,7 @@ export function chooseMove(s: GameState, me: PlayerId): Move {
   // ---- avaliar jogadas ----
   const scored = plays.map((m) => {
     const next = simulate(s, m, me);
-    let v = evaluate(next, me);
+    let v = evaluate(next, me) - wastePenalty(s, next, m, me);
     if (m.type === 'leader') v -= s.round < 3 ? 4 : 0; // líder é recurso único
     const card = m.type === 'play' ? s.players[me].hand.find((c) => c.uid === m.uid) : undefined;
     if (card && def(card).type === 'hero' && s.round === 1 && !lastLife) v -= 3; // guarda heróis
@@ -119,6 +171,7 @@ export function chooseMove(s: GameState, me: PlayerId): Move {
     // oponente passou: gasta o mínimo para virar; se não dá para virar, passa
     const winning = scored.filter((x) => score(x.next, me) > score(x.next, opp));
     if (winning.length) {
+      // menos cartas gastas primeiro; entre iguais, a que não desperdiça habilidade
       winning.sort((a, b) => b.next.players[me].hand.length - a.next.players[me].hand.length || b.v - a.v);
       return winning[0]!.m;
     }

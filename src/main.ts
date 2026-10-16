@@ -3,11 +3,13 @@ import { mountDeckBuilder } from './ui/deckbuilder';
 import { mountGame } from './ui/game';
 import { initMusic } from './ui/music';
 import { preloadArt } from './ui/preload';
+import { initSfx } from './ui/sfx';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
 async function boot(root: HTMLElement) {
   initMusic();
+  initSfx();
 
   // tela de carregamento enquanto as artes são decodificadas
   root.innerHTML = `

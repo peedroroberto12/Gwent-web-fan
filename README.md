@@ -59,6 +59,13 @@ Depois: IA mais forte, Skellige, multiplayer.
 
 A trilha *High Stakes at the Hearth* (`public/music/theme.mp3`) foi gerada por IA para o projeto e é livre de direitos. Ela toca em loop a partir do primeiro clique e pode ser desligada no botão ♪. Para trocar, substitua o arquivo (aceita `.mp3` ou `.ogg`).
 
+## Efeitos sonoros
+
+- Sons de carta e fichas: [Casino Audio](https://kenney.nl/assets/casino-audio), de Kenney, licença CC0 (`public/sfx/LICENSE-KENNEY.txt`).
+- Sons das habilidades (geada, fogo, trompa, espião...): sintetizados no próprio jogo com a Web Audio API.
+
+Música e sons podem ser desligados separadamente nos botões da partida.
+
 ## Visual
 
 Layout inspirado no tabuleiro do Witcher 3, desenhado inteiramente em CSS (sem texturas do jogo). Fontes livres embutidas: Alegreya Sans e Alegreya SC (SIL Open Font License).

@@ -11,3 +11,5 @@ public/cards/*
 public/music/*
 !public/music/.gitkeep
 !public/music/theme.mp3
+
+# Efeitos sonoros (Kenney Casino Audio, CC0) são versionados: public/sfx/

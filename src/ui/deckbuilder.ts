@@ -25,6 +25,7 @@ import {
 } from '../engine';
 import { cardView } from './cardView';
 import { musicButton, onMusicChange, toggleMusic } from './music';
+import { playCard } from './sfx';
 
 export interface SideConfig {
   faction: Faction;
@@ -148,6 +149,7 @@ function addCard(id: string) {
     if (!canAdd(cfg.deck, cfg.faction, id)) return;
     s.decks[cfg.faction] = [...cfg.deck, id];
     ui.flash = { grid: 'deck', id };
+    playCard('place', 0.35);
   });
 }
 
@@ -159,6 +161,7 @@ function removeCard(id: string) {
     deck.splice(i, 1);
     s.decks[cfg.faction] = deck;
     ui.flash = { grid: 'collection', id };
+    playCard('slide', 0.35);
   });
 }
 

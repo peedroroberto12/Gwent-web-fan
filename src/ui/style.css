@@ -268,7 +268,7 @@ button { font: inherit; }
 .row.weather--close .row__cards::after { background: linear-gradient(var(--frost), rgba(190, 225, 255, 0.12)); }
 .row.weather--ranged .row__cards::after { background: linear-gradient(rgba(220, 220, 225, 0.3), var(--fog)); }
 .row.weather--siege .row__cards::after { background: repeating-linear-gradient(100deg, rgba(160, 190, 255, 0.12) 0 2px, transparent 2px 9px), var(--rain); }
-.row.weather-new .row__cards::after { animation: weather-in 0.8s ease-out; }
+.row.weather-new .row__cards::after { animation: weather-in 1.6s ease-out; }
 @keyframes weather-in {
   0% { opacity: 0; }
   40% { opacity: 1; filter: brightness(1.8); }
@@ -933,3 +933,28 @@ button { font: inherit; }
 .db__hover b { color: var(--gold); }
 .db__meta { margin: 0; color: var(--muted); }
 .db__hint { margin: 0; color: var(--muted); font-style: italic; text-align: center; }
+
+/* efeito pequeno de habilidade na própria carta */
+.fx-ring {
+  position: fixed;
+  aspect-ratio: 1;
+  border: 2px solid;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 101;
+}
+.fx-label {
+  position: fixed;
+  z-index: 102;
+  padding: 2px 10px;
+  border-radius: 3px;
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  background: rgba(12, 6, 2, 0.88);
+  box-shadow: 0 0 0 1px currentColor, 0 4px 10px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 0 6px currentColor;
+}
