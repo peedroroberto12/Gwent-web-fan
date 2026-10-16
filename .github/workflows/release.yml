@@ -1,18 +1,24 @@
 name: Release
 
-# Ao criar uma tag v* (ex: git tag v0.1.0 && git push --tags),
-# roda os testes, gera o build e publica um .zip "abre e joga" no Release.
+# - Tag v* (ex.: git tag v0.1.0 && git push --tags): testa, gera o .zip "abre e joga",
+#   cria o Release e anexa os instaladores de Windows, Mac e Linux.
+# - Execução manual (aba Actions > Release > Run workflow): só compila e guarda os
+#   instaladores como artefatos, sem publicar nada. Bom para testar antes de lançar.
+# - Pull request: só roda os testes e o build web.
 on:
   push:
     tags: ['v*']
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  web:
     runs-on: ubuntu-latest
+    outputs:
+      release_id: ${{ steps.release.outputs.id }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,11 +29,74 @@ jobs:
       - run: npm test
       - run: npm run fetch-cards
       - run: npm run build
-      - name: Empacotar
+      - name: Empacotar versão web
         if: startsWith(github.ref, 'refs/tags/')
-        run: cd dist && zip -r ../gwent-${{ github.ref_name }}.zip .
-      - name: Publicar release
+        run: cd dist && zip -r ../gwent-web-${{ github.ref_name }}.zip .
+      - name: Criar release
+        id: release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: gwent-${{ github.ref_name }}.zip
+          name: Gwent Clássico ${{ github.ref_name }}
+          files: gwent-web-${{ github.ref_name }}.zip
+          body: |
+            Fan project gratuito e não oficial do Gwent de The Witcher 3. Não aprovado nem endossado pela CD PROJEKT RED.
+
+            **Como jogar**
+            - **Windows:** baixe o `..._x64-setup.exe` e instale. Se aparecer "O Windows protegeu o computador", clique em *Mais informações → Executar assim mesmo* (o programa não tem assinatura paga).
+            - **Mac:** baixe o `.dmg`. Na primeira vez, clique com o botão direito no app e escolha *Abrir*.
+            - **Linux:** `.AppImage` (dê permissão de execução) ou `.deb`.
+            - **Sem instalar:** baixe o `gwent-web-...zip`, extraia e abra o `index.html` no navegador.
+
+  desktop:
+    needs: web
+    if: github.event_name != 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows-latest
+            args: ''
+          - platform: macos-latest
+            args: '--target universal-apple-darwin'
+          - platform: ubuntu-22.04
+            args: ''
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      - name: Bibliotecas do Linux
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+      - run: npm ci
+      - run: npm run fetch-cards
+      - name: Compilar e anexar ao release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ needs.web.outputs.release_id }}
+          args: ${{ matrix.args }}
+      - name: Guardar instaladores (execução manual)
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gwent-${{ matrix.platform }}
+          path: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
+            src-tauri/target/release/bundle/deb/*.deb
+            src-tauri/target/release/bundle/appimage/*.AppImage
+            src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
+          if-no-files-found: ignore

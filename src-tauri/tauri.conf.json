@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Gwent Classico",
+  "version": "0.1.0",
+  "identifier": "io.github.peedroroberto12.gwentclassico",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Gwent Clássico",
+        "width": 1600,
+        "height": 900,
+        "minWidth": 1100,
+        "minHeight": 650,
+        "resizable": true,
+        "maximized": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "CardGame",
+    "shortDescription": "Gwent clássico do Witcher 3, offline.",
+    "longDescription": "Fan project gratuito e não oficial do Gwent de The Witcher 3. Não aprovado nem endossado pela CD PROJEKT RED.",
+    "copyright": "Fan project não oficial. The Witcher e GWENT são marcas da CD PROJEKT Capital Group.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "nsis": {
+        "languages": ["PortugueseBR", "English"],
+        "displayLanguageSelector": false,
+        "installMode": "currentUser"
+      }
+    }
+  }
+}

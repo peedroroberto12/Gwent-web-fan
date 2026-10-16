@@ -13,3 +13,7 @@ public/music/*
 !public/music/theme.mp3
 
 # Efeitos sonoros (Kenney Casino Audio, CC0) são versionados: public/sfx/
+
+# Tauri (executável de PC)
+src-tauri/target/
+src-tauri/gen/
