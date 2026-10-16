@@ -72,9 +72,9 @@ export function toggleMusic() {
 
 export function musicButton(): string {
   if (available === false) {
-    return `<button class="btn btn--ghost btn--small" disabled
-      title="Coloque um arquivo em public/music/theme.mp3 para ter música">♪ Sem música</button>`;
+    return `<button class="btn btn--ghost btn--small btn--icon" disabled
+      title="Coloque um arquivo em public/music/theme.mp3 para ter música">♪<span class="lbl"> Sem música</span></button>`;
   }
-  return `<button class="btn btn--ghost btn--small" data-action="music" ${available ? '' : 'disabled'}>
-    ${enabled ? '♪ Música: ligada' : '♪ Música: desligada'}</button>`;
+  return `<button class="btn btn--ghost btn--small btn--icon ${enabled ? '' : 'is-off'}" data-action="music" ${available ? '' : 'disabled'} title="Música">
+    ♪<span class="lbl">${enabled ? ' Música: ligada' : ' Música: desligada'}</span></button>`;
 }

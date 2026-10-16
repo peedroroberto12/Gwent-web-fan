@@ -7,10 +7,9 @@ Recriação gratuita do Gwent de *The Witcher 3*, jogável offline no navegador.
 
 ## Jogar
 
-1. Baixe o `.zip` da última versão em **Releases**.
-2. Extraia e abra o `index.html` no navegador.
-
-Não precisa instalar nada nem ter internet.
+- **No PC:** baixe o instalador da última versão em **Releases** (Windows `.exe`, Mac `.dmg`, Linux `.AppImage`/`.deb`).
+- **No celular (Android e iPhone):** abra o link do GitHub Pages do repositório, gire o celular e jogue. Para virar "app", use **Adicionar à tela inicial**: abre em tela cheia e funciona offline depois da primeira vez. Segure o dedo numa carta para ver os detalhes.
+- **Sem instalar:** baixe o `gwent-web-...zip` do Release, extraia e abra o `index.html`.
 
 ## Desenvolver
 

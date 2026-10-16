@@ -28,6 +28,8 @@ import { PRESETS, presetsFor } from '../data/presets';
 import { cardView } from './cardView';
 import { musicButton, onMusicChange, toggleMusic } from './music';
 import { playCard } from './sfx';
+import { enablePeek, justPeeked } from './peek';
+import { fullscreenButton, goFullscreen } from './mobile';
 
 export interface SideConfig {
   faction: Faction;
@@ -181,7 +183,12 @@ function cardTile(c: CardDef, count: number, grid: 'collection' | 'deck'): HTMLE
   if (count > 1 || grid === 'collection') wrap.insertAdjacentHTML('beforeend', `<span class="db__count">×${count}</span>`);
   wrap.title = grid === 'collection' ? 'Clique para adicionar ao baralho' : 'Clique para tirar do baralho';
   wrap.addEventListener('mouseenter', () => { ui.hover = c; renderHover(); });
-  wrap.addEventListener('click', () => (grid === 'collection' ? addCard(c.id) : removeCard(c.id)));
+  enablePeek(wrap, c);
+  wrap.addEventListener('click', () => {
+    if (justPeeked()) return;
+    if (grid === 'collection') addCard(c.id);
+    else removeCard(c.id);
+  });
   if (ui.flash?.grid === grid && ui.flash.id === c.id) {
     wrap.animate(
       [{ transform: 'scale(1.18)', filter: 'brightness(1.6)' }, { transform: 'none', filter: 'none' }],
@@ -238,7 +245,7 @@ function render() {
           </div>
           <button class="db__arrow" data-faction="1" aria-label="Próxima facção">›</button>
         </div>
-        <div class="db__head-actions">${musicButton()}</div>
+        <div class="db__head-actions">${fullscreenButton()}${musicButton()}</div>
       </header>
 
       <section class="db__panel">
@@ -304,6 +311,7 @@ function render() {
 
   const leaderCard = cardView(getCard(cfg.leader));
   leaderCard.addEventListener('mouseenter', () => { ui.hover = getCard(cfg.leader); renderHover(); });
+  enablePeek(leaderCard, getCard(cfg.leader));
   root.querySelector('.db__leader-card')!.append(leaderCard);
   renderHover();
   ui.flash = null;
@@ -347,6 +355,7 @@ function render() {
     if (!problems.length) onStart(currentSetup());
   });
   root.querySelector('[data-action="music"]')?.addEventListener('click', toggleMusic);
+  root.querySelector('[data-action="fullscreen"]')?.addEventListener('click', () => void goFullscreen().then(() => render()));
 }
 
 export function mountDeckBuilder(el: HTMLElement, start: (setup: MatchSetup) => void) {

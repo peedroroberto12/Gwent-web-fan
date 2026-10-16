@@ -33,6 +33,8 @@ import {
 import { cardView } from './cardView';
 import { animate, cardEffect, returnGhost, snapshot, spotlight, type Effect } from './fx';
 import { playAbility, playCard, playRound, sfxButton, toggleSfx } from './sfx';
+import { enablePeek, justPeeked } from './peek';
+import { fullscreenButton, goFullscreen } from './mobile';
 import type { MatchSetup } from './deckbuilder';
 import { musicButton, onMusicChange, toggleMusic } from './music';
 
@@ -242,7 +244,7 @@ function onHandClick(uid: number) {
 }
 
 function onTarget(t: Target) {
-  if (!myTurn()) return;
+  if (!myTurn() || justPeeked()) return;
   void dispatch(t.move);
 }
 
@@ -321,7 +323,10 @@ function onPointerUp(e: PointerEvent) {
   const d = drag;
   drag = null;
   if (!d) return;
-  if (!d.ghost) return onHandClick(d.uid);
+  if (!d.ghost) {
+    if (justPeeked()) return; // foi uma espiada, não uma jogada
+    return onHandClick(d.uid);
+  }
 
   d.hover?.classList.remove('is-hover');
   const hit = e.type === 'pointerup' ? dropAt(e.clientX, e.clientY) : null;
@@ -374,6 +379,7 @@ function showPreview(card: CardDef | null) {
 
 function hoverable(el: HTMLElement, card: CardDef) {
   el.addEventListener('mouseenter', () => { if (!drag?.ghost) showPreview(card); });
+  enablePeek(el, card); // celular: segurar o dedo mostra a carta grande
   return el;
 }
 
@@ -431,10 +437,11 @@ function render(overrides?: Map<string, DOMRect>) {
         <div class="actions">
           <button class="btn btn--pass" data-action="pass" ${myTurn() && !g.pending ? '' : 'disabled'}>Passar</button>
           <div class="actions__row">
-            <button class="btn btn--ghost btn--small" data-action="restart">Recomeçar</button>
-            <button class="btn btn--ghost btn--small" data-action="decks">Baralhos</button>
+            <button class="btn btn--ghost btn--small btn--icon" data-action="restart" title="Recomeçar">↻<span class="lbl"> Recomeçar</span></button>
+            <button class="btn btn--ghost btn--small btn--icon" data-action="decks" title="Baralhos">☰<span class="lbl"> Baralhos</span></button>
             ${musicButton()}
             ${sfxButton()}
+            ${fullscreenButton()}
           </div>
         </div>
       </aside>
@@ -448,7 +455,7 @@ function render(overrides?: Map<string, DOMRect>) {
     if (p === ME && myTurn() && !g.pending && canUseLeader(g, ME)) {
       el.classList.add('is-usable');
       el.title = 'Usar habilidade do líder';
-      el.addEventListener('click', () => void dispatch({ type: 'leader' }));
+      el.addEventListener('click', () => { if (!justPeeked()) void dispatch({ type: 'leader' }); });
     }
     root.querySelector(`[data-leader="${p}"]`)!.append(el);
   }
@@ -525,6 +532,7 @@ function render(overrides?: Map<string, DOMRect>) {
   root.querySelector('[data-action="music"]')?.addEventListener('click', toggleMusic);
   root.querySelector('[data-action="sfx"]')!.addEventListener('click', () => { toggleSfx(); render(); });
   root.querySelector('[data-action="decks"]')!.addEventListener('click', leave);
+  root.querySelector('[data-action="fullscreen"]')?.addEventListener('click', () => void goFullscreen().then(() => render()));
 
   fitAll(); // antes de animar, para as posições finais já estarem certas
 

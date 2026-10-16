@@ -52,7 +52,7 @@ export function toggleSfx() {
 }
 
 export function sfxButton(): string {
-  return `<button class="btn btn--ghost btn--small" data-action="sfx">${enabled ? 'Sons: ligados' : 'Sons: desligados'}</button>`;
+  return `<button class="btn btn--ghost btn--small btn--icon ${enabled ? '' : 'is-off'}" data-action="sfx" title="Efeitos sonoros">🔊<span class="lbl">${enabled ? ' Sons: ligados' : ' Sons: desligados'}</span></button>`;
 }
 
 /** Som físico de carta. Variações aleatórias e leve mudança de tom para não soar repetitivo. */

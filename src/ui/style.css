@@ -996,3 +996,168 @@ button { font: inherit; }
 .hand .card:hover, .hand .card.is-selected { z-index: 5; }
 
 .rows, .hand, .row__cards, .weather { min-width: 0; }
+
+/* ================================================================ celular e toque */
+
+body {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+/* barras do navegador do celular: usa a altura visível de verdade */
+.board, .db, .loading { height: 100dvh; }
+
+/* botões com ícone: no PC mostram o texto também */
+.btn--icon { white-space: nowrap; }
+.btn--icon.is-off { opacity: 0.55; text-decoration: line-through; }
+
+/* em telas de toque não existe "passar o mouse": evita cartas presas levantadas */
+@media (hover: none) {
+  .hand .card:hover { transform: none; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.65); }
+  .db__tile:hover .card { transform: none; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.65); }
+}
+
+/* espiada: segurar o dedo numa carta */
+.peek {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  padding: 3vh 3vw;
+  background: rgba(0, 0, 0, 0.78);
+  animation: modal-in 0.2s ease-out;
+}
+.peek__box { display: flex; align-items: center; gap: 18px; max-width: 94vw; max-height: 92dvh; }
+.peek__card .card { width: auto; height: min(82dvh, 440px); box-shadow: 0 0 0 2px var(--gold), 0 14px 40px rgba(0, 0, 0, 0.8); }
+.peek__text {
+  max-width: 320px;
+  max-height: 82dvh;
+  overflow: hidden;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.35;
+  background: rgba(10, 6, 2, 0.9);
+  border-top: 1px solid rgba(184, 147, 90, 0.5);
+  border-bottom: 1px solid rgba(184, 147, 90, 0.5);
+}
+.peek__text h3 { margin: 0 0 2px; font-family: var(--font-title); color: var(--gold-hi); }
+.peek__text ul { margin: 6px 0; padding-left: 16px; }
+.peek__text b { color: var(--gold); }
+.peek__meta { margin: 0 0 6px; color: var(--muted); }
+.peek__flavor { margin: 6px 0; font-style: italic; color: var(--muted); }
+.peek__text small { color: var(--muted); }
+
+/* aviso para girar o celular */
+.rotate { display: none; }
+@media (orientation: portrait) and (max-width: 700px) {
+  #app { display: none; }
+  .rotate {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 22px;
+    color: var(--gold-hi);
+    font-family: var(--font-title);
+    font-size: 20px;
+    background: radial-gradient(ellipse at center, #3a2410, var(--ink) 70%);
+  }
+  .rotate__phone {
+    width: 60px;
+    height: 104px;
+    border: 4px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: inset 0 0 0 3px #2b1306;
+    animation: rotate-hint 2.4s ease-in-out infinite;
+  }
+}
+@keyframes rotate-hint {
+  0%, 25% { transform: rotate(0deg); }
+  55%, 85% { transform: rotate(-90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* ---------------------------------------------------------------- modo compacto (celular deitado) */
+@media (max-height: 520px) {
+  /* --- partida --- */
+  .board { grid-template-columns: 17% minmax(0, 1fr) 12%; }
+  .left { padding: 1vh 0.7vw; grid-template-rows: 15% 1fr 13% 1fr 15%; row-gap: 0.6vh; }
+  .right { padding: 1vh 0.7vw; grid-template-rows: 21% 1fr 21%; row-gap: 1vh; }
+  .preview, .pile--discard { display: none; }
+  .piles--op { grid-row: 1; }
+  .actions { grid-row: 2; align-self: center; gap: 1vh; }
+  .piles--me { grid-row: 3; }
+  .piles { justify-content: center; }
+
+  .leader-slot { width: 52%; }
+  .weather { width: 94%; }
+  .player { gap: 0.5vw; margin-right: 2.4vw; padding: 0.7vh 3vw 0.7vh 0.6vw; }
+  .player__portrait, .player__info small { display: none; }
+  .player__info strong { font-size: 12px; }
+  .player__stats { gap: 6px; margin-top: 2px; }
+  .handcount { font-size: 11px; }
+  .gem { width: 9px; }
+  .player__total { width: min(5.4vw, 10vh); right: calc(-1 * min(2.7vw, 5vh)); font-size: 14px; }
+  .player__passed { font-size: 11px; right: 2.5vw; bottom: -2.4vh; }
+
+  .field { padding: 0.8vh 0.4vw; gap: 0.5vh; }
+  .rows { gap: 0.5vh; }
+  .row { grid-template-columns: 7vh minmax(0, 0.85fr) minmax(0, 7fr); gap: 0.4vw; }
+  .row__score { width: min(5.6vh, 3.6vw); font-size: 10px; box-shadow: 0 0 0 1px #1a0b02, 0 0 0 2px #5b3a1a, 0 2px 4px rgba(0, 0, 0, 0.6); }
+  .row__label { font-size: 9px; }
+  .status { font-size: 10px; min-height: 0; padding: 0.2vh 8px; gap: 8px; white-space: nowrap; overflow: hidden; }
+  .status > * { flex: none; }
+  .hand { padding: 0 0.4vw; }
+
+  .btn--pass { font-size: 13px; padding: 1.4vh 4px; }
+  .actions__row { gap: 4px; }
+  .btn--icon { font-size: 15px; padding: 0.8vh 0; }
+  .btn--icon .lbl { display: none; }
+
+  .fx-label { font-size: 11px; padding: 1px 6px; }
+  .spot--banner .spot__label strong { font-size: 26px; }
+  .spot--banner .spot__label span { font-size: 15px; }
+  .spot__label { padding: 6px 24px; }
+
+  .modal__box { padding: 10px 14px; gap: 8px; max-height: 94dvh; }
+  .modal__box h2 { font-size: 17px; }
+  .modal--end h2 { font-size: 26px; }
+  .modal__cards { gap: 6px; }
+  .modal__cards .card { width: min(11vw, 64px); }
+  .modal .btn { min-width: 120px; padding: 6px 10px; }
+
+  /* --- montagem de baralho --- */
+  .db { grid-template-columns: minmax(0, 1fr) clamp(165px, 25vw, 230px) minmax(0, 1fr); gap: 0.8vh 1vw; padding: 1vh 1vw; }
+  .db__head { padding-bottom: 0.6vh; }
+  .db__tab { padding: 4px 8px; font-size: 11px; }
+  .db__faction { gap: 10px; }
+  .db__faction h1 { font-size: 18px; }
+  .db__faction p { font-size: 10px; max-width: 40vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .db__arrow { width: 28px; height: 28px; font-size: 18px; }
+  .db__arrow--small { width: 22px; height: 22px; font-size: 14px; }
+  .db__head-actions { display: flex; gap: 4px; }
+  .db__head-actions .btn--icon { padding: 4px 9px; }
+
+  .db__panel { padding: 0.6vh 0.6vw; }
+  .db__panel h2, .db__center h2 { font-size: 13px; margin: 0 0 3px; }
+  .db__panel-head span { font-size: 11px; }
+  .db__filters { gap: 3px; margin-bottom: 4px; }
+  .db__filter { font-size: 10px; padding: 2px 6px; }
+  .db__grid { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 7px 5px; padding: 2px 4px 8px 1px; }
+  .db__count { font-size: 10px; padding: 0 5px; bottom: -5px; }
+
+  .db__center { gap: 0.6vh; }
+  .db__leader { gap: 8px; }
+  .db__leader-card .card { width: 15vh; }
+  .db__leader-name { font-size: 11px; }
+  .db__leader-text { font-size: 10px; }
+  .db__stats { margin: 0; }
+  .db__stats div { padding: 0.2vh 2px; font-size: 10px; }
+  .db__presets { gap: 4px; }
+  .db__select { font-size: 11px; padding: 3px 4px; }
+  .db__start { font-size: 13px; padding: 0.9vh; }
+  .db__preset-note, .db__problems { font-size: 10px; }
+  .db__hover { display: none; }
+}
