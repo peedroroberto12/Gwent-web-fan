@@ -6,3 +6,14 @@ export { createGame, defaultDeck, factionLeaders, type GameOptions } from './set
 export { applyMove, canUseLeader, legalMoves, musterGroup, pendingOptions } from './rules';
 export { def, isHero, rowScore, rowStrengths, score, weatherRows } from './score';
 export { leaderAbility, LEADERS, type LeaderAbility } from './leaders';
+export {
+  canAdd,
+  collectionFor,
+  countOf,
+  deckProblems,
+  deckStats,
+  sortForDisplay,
+  MAX_SPECIALS,
+  MIN_UNITS,
+  type DeckStats,
+} from './deck';

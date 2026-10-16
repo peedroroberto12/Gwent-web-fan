@@ -46,11 +46,12 @@ Artes e dados vêm do repositório [API-Gwent](https://github.com/day-s-ea/API-G
 ## Escopo da v1
 
 - Regras completas do Gwent clássico (jogo base)
-- Reinos do Norte e Nilfgaard, com baralhos prontos
+- As 4 facções (Reinos do Norte, Nilfgaard, Scoia'tael, Monstros)
+- Montagem de baralho antes da partida, para você e para a CPU (mínimo 22 unidades, máximo 10 especiais)
 - Partida contra IA heurística
 - Desktop primeiro
 
-Depois: demais facções, editor de baralho, IA mais forte, multiplayer.
+Depois: IA mais forte, Skellige, multiplayer.
 
 > Estado atual: motor de regras completo e testado (todas as habilidades de carta, 19 dos 20 líderes e as habilidades de facção) e partida jogável contra a IA.
 

@@ -48,8 +48,12 @@ function load(i = 0) {
   a.addEventListener('error', () => load(i + 1), { once: true });
 }
 
-export function initMusic(rerender: () => void) {
-  onChange = rerender;
+/** Quem deve ser avisado quando o estado da música muda (a tela atual). */
+export function onMusicChange(fn: () => void) {
+  onChange = fn;
+}
+
+export function initMusic() {
   load();
   // primeira interação libera o áudio
   window.addEventListener('pointerdown', () => {

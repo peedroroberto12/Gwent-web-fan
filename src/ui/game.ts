@@ -31,7 +31,8 @@ import {
 } from '../engine';
 import { cardView } from './cardView';
 import { animate, returnGhost, snapshot, spotlight, type Effect } from './fx';
-import { initMusic, musicButton, toggleMusic } from './music';
+import type { MatchSetup } from './deckbuilder';
+import { musicButton, onMusicChange, toggleMusic } from './music';
 
 const ME: PlayerId = 0;
 const AI: PlayerId = 1;
@@ -50,10 +51,18 @@ const ui = {
 const effects = new Map<number, Effect>();
 const origins = new Map<string, string>(); // uid -> seletor de onde a carta surge
 
+let setup: MatchSetup;
+let onDecks: () => void = () => {};
+/** Cada partida montada ganha um número; timers de uma partida antiga não mexem na tela nova. */
+let session = 0;
+
 function newGame() {
-  const mine: Faction = 'northern';
-  const theirs: Faction = 'nilfgaard';
-  g = createGame({ factions: [mine, theirs] });
+  session++;
+  g = createGame({
+    factions: [setup.me.faction, setup.cpu.faction],
+    leaders: [setup.me.leader, setup.cpu.leader],
+    decks: [setup.me.deck, setup.cpu.deck],
+  });
   ui.selected = null;
   ui.reveal = null;
   ui.log = g.turn === ME ? 'Você começa. Arraste uma carta até a fileira (ou clique nela).' : 'O oponente começa.';
@@ -105,6 +114,7 @@ const actor = () => (g.pending ? g.pending.player : g.turn);
 const myTurn = () => !ui.busy && g.winner === null && actor() === ME && !g.players[ME].passed;
 
 async function dispatch(move: Move, overrides?: Map<string, DOMRect>) {
+  const mySession = session;
   const by = actor();
   const { state, events } = applyMove(g, move);
   g = state;
@@ -143,6 +153,7 @@ async function dispatch(move: Move, overrides?: Map<string, DOMRect>) {
     }
   }
 
+  if (mySession !== session) return; // o jogador saiu para o editor no meio da animação
   ui.busy = false;
   render();
   next();
@@ -150,7 +161,8 @@ async function dispatch(move: Move, overrides?: Map<string, DOMRect>) {
 
 function next() {
   if (g.winner !== null || ui.reveal) return;
-  if (actor() === AI) setTimeout(() => void dispatch(chooseMove(g, AI)), 650);
+  const mySession = session;
+  if (actor() === AI) setTimeout(() => { if (mySession === session) void dispatch(chooseMove(g, AI)); }, 650);
 }
 
 // ---------------------------------------------------------------- alvos de jogada
@@ -376,8 +388,9 @@ function render(overrides?: Map<string, DOMRect>) {
         <div class="piles piles--me"></div>
         <div class="actions">
           <button class="btn btn--pass" data-action="pass" ${myTurn() && !g.pending ? '' : 'disabled'}>Passar</button>
-          <div class="actions__row">
-            <button class="btn btn--ghost btn--small" data-action="restart">Nova partida</button>
+          <div class="actions__row actions__row--3">
+            <button class="btn btn--ghost btn--small" data-action="restart">Recomeçar</button>
+            <button class="btn btn--ghost btn--small" data-action="decks">Baralhos</button>
             ${musicButton()}
           </div>
         </div>
@@ -467,6 +480,7 @@ function render(overrides?: Map<string, DOMRect>) {
   root.querySelector('[data-action="pass"]')!.addEventListener('click', () => { if (myTurn()) void dispatch({ type: 'pass' }); });
   root.querySelector('[data-action="restart"]')!.addEventListener('click', () => { newGame(); render(); next(); });
   root.querySelector('[data-action="music"]')?.addEventListener('click', toggleMusic);
+  root.querySelector('[data-action="decks"]')!.addEventListener('click', leave);
 
   animate(root, before, {
     effects,
@@ -529,7 +543,14 @@ function renderOverlays() {
     again.className = 'btn';
     again.textContent = 'Jogar de novo';
     again.addEventListener('click', () => { newGame(); render(); next(); });
-    el.querySelector('.modal__box')!.append(again);
+    const decks = document.createElement('button');
+    decks.className = 'btn btn--ghost';
+    decks.textContent = 'Montar baralho';
+    decks.addEventListener('click', leave);
+    const row = document.createElement('div');
+    row.className = 'modal__buttons';
+    row.append(again, decks);
+    el.querySelector('.modal__box')!.append(row);
   }
 }
 
@@ -546,11 +567,19 @@ function modal(title: string, hint?: string): HTMLElement {
   return el;
 }
 
-export function mountGame(el: HTMLElement) {
+function leave() {
+  session++; // cancela animações e a vez da IA em andamento
+  ui.busy = false;
+  document.querySelectorAll('.drag-ghost').forEach((e) => e.remove());
+  onDecks();
+}
+
+export function mountGame(el: HTMLElement, matchSetup: MatchSetup, backToDecks: () => void) {
   root = el;
+  setup = matchSetup;
+  onDecks = backToDecks;
   newGame();
-  initMusic(() => { if (!ui.busy && !drag) render(); });
+  onMusicChange(() => { if (!ui.busy && !drag) render(); });
   render();
   next();
 }
-
