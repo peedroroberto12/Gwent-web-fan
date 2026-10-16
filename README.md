@@ -18,6 +18,7 @@ Requer Node.js 22+.
 
 ```bash
 npm install
+npm run fetch-cards # baixa artes e dados das cartas (precisa do git)
 npm run dev        # abre o jogo em modo desenvolvimento
 npm test           # roda os testes do motor de regras
 npm run build      # gera a versão final em dist/
@@ -38,6 +39,10 @@ public/cards/  imagens das cartas (não versionadas)
 
 Regra de ouro: `engine` não importa nada de `ui` nem de `ai`. A UI e a IA conversam com o motor só por `legalMoves(state)` e `applyMove(state, move)`.
 
+## Cartas
+
+Artes e dados vêm do repositório [API-Gwent](https://github.com/day-s-ea/API-Gwent). O `npm run fetch-cards` baixa as ilustrações e ícones para `public/cards/` (fora do Git) e gera `src/data/cards.json` normalizado (versionado).
+
 ## Escopo da v1
 
 - Regras completas do Gwent clássico (jogo base)
@@ -46,6 +51,8 @@ Regra de ouro: `engine` não importa nada de `ui` nem de `ai`. A UI e a IA conve
 - Desktop primeiro
 
 Depois: demais facções, editor de baralho, IA mais forte, multiplayer.
+
+> Estado atual: **protótipo de interface** jogável com regras simplificadas (clima, trompa, vínculo, moral, espião, queimar). O motor de regras completo vem a seguir.
 
 ## Lançar uma versão
 

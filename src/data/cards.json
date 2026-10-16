@@ -1,0 +1,2577 @@
+[
+  {
+    "id": "albrich",
+    "name": "Albrich",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "A fireball? Of course. Whatever Your Imperial Majesty wishes.",
+    "art": "cards/art/albrich.webp"
+  },
+  {
+    "id": "arachas-1",
+    "name": "Arachas",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Ugly – nature's way of saying 'Stay the fuck away.'",
+    "art": "cards/art/arachas-1.webp"
+  },
+  {
+    "id": "arachas-2",
+    "name": "Arachas",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Ugly – nature's way of saying 'Stay the fuck away.'",
+    "art": "cards/art/arachas-2.webp"
+  },
+  {
+    "id": "arachas-3",
+    "name": "Arachas",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Ugly – nature's way of saying 'Stay the fuck away.'",
+    "art": "cards/art/arachas-3.webp"
+  },
+  {
+    "id": "arachas-behemoth",
+    "name": "Arachas Behemoth",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 6,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Like a cross between a crab, a spider... and a ploughin' mountain.",
+    "art": "cards/art/arachas-behemoth.webp"
+  },
+  {
+    "id": "assire-var-anahid",
+    "name": "Assire var Anahid",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Nilfgaardian mages do have a choice: servile submission, or the gallows.",
+    "art": "cards/art/assire-var-anahid.webp"
+  },
+  {
+    "id": "ballista-1",
+    "name": "Ballista",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Usually we give 'em female names. \"Like Jenny?\" \"More like Bertha.\"",
+    "art": "cards/art/ballista-1.webp"
+  },
+  {
+    "id": "ballista-2",
+    "name": "Ballista",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Usually we give 'em female names. \"Like Jenny?\" \"More like Bertha.\"",
+    "art": "cards/art/ballista-2.webp"
+  },
+  {
+    "id": "barclay-els",
+    "name": "Barclay Els",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 6,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "Our mead smells like piss, do it? Easy to fix – I'll break your fuckin' nose!",
+    "art": "cards/art/barclay-els.webp"
+  },
+  {
+    "id": "biting-frost",
+    "name": "Biting Frost",
+    "faction": "neutral",
+    "type": "weather",
+    "rows": [],
+    "strength": null,
+    "abilities": [
+      "weather_frost"
+    ],
+    "copies": 3,
+    "flavor": "Best part about frost – bodies of the fallen don't rot so quickly.",
+    "art": "cards/art/biting-frost.webp"
+  },
+  {
+    "id": "black-infantry-archer-1",
+    "name": "Black Infantry Archer",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I aim for the knee. Always.",
+    "art": "cards/art/black-infantry-archer-1.webp"
+  },
+  {
+    "id": "black-infantry-archer-2",
+    "name": "Black Infantry Archer",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I aim for the knee. Always.",
+    "art": "cards/art/black-infantry-archer-2.webp"
+  },
+  {
+    "id": "blue-stripes-commando",
+    "name": "Blue Stripes Commando",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [
+      "tight_bond"
+    ],
+    "copies": 5,
+    "flavor": "I'll do anything for Temeria. Mostly, though, I kill for her.",
+    "art": "cards/art/blue-stripes-commando.webp"
+  },
+  {
+    "id": "botchling",
+    "name": "Botchling",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Admit your mistakes and bury them proper – else they'll come back to haunt you.",
+    "art": "cards/art/botchling.webp"
+  },
+  {
+    "id": "cahir-mawr-dyffryn-aep-ceallach",
+    "name": "Cahir Mawr Dyffryn aep Ceallach",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "His eyes flashed under his winged helmet. Fire gleamed from his sword's blade.",
+    "art": "cards/art/cahir-mawr-dyffryn-aep-ceallach.webp"
+  },
+  {
+    "id": "catapult",
+    "name": "Catapult",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 8,
+    "abilities": [
+      "tight_bond"
+    ],
+    "copies": 3,
+    "flavor": "The gods help those who have better catapults.",
+    "art": "cards/art/catapult.webp"
+  },
+  {
+    "id": "celaeno-harpy",
+    "name": "Celaeno Harpy",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "Common harpies feed on carrion. Celaeno harpies... they feed on dreams.",
+    "art": "cards/art/celaeno-harpy.webp"
+  },
+  {
+    "id": "ciaran-aep-easnillien",
+    "name": "Ciaran aep Easnillien",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 3,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "The path to freedom is paved in blood, not ink.",
+    "art": "cards/art/ciaran-aep-easnillien.webp"
+  },
+  {
+    "id": "cirilla-fiona-elen-riannon",
+    "name": "Cirilla Fiona Elen Riannon",
+    "faction": "neutral",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 15,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Know when fairy tales cease to be tales? When people start believing in them.",
+    "art": "cards/art/cirilla-fiona-elen-riannon.webp"
+  },
+  {
+    "id": "clear-weather",
+    "name": "Clear Weather",
+    "faction": "neutral",
+    "type": "weather",
+    "rows": [],
+    "strength": null,
+    "abilities": [
+      "weather_clear"
+    ],
+    "copies": 2,
+    "flavor": "The sun's shinin', Dromle! The sun's shinin'! Maybe there's hope left after all...",
+    "art": "cards/art/clear-weather.webp"
+  },
+  {
+    "id": "cockatrice",
+    "name": "Cockatrice",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Born of an egg laid by a cockerel... if you believe such peasant drivel.",
+    "art": "cards/art/cockatrice.webp"
+  },
+  {
+    "id": "commander-s-horn",
+    "name": "Commander's Horn",
+    "faction": "neutral",
+    "type": "special",
+    "rows": [],
+    "strength": null,
+    "abilities": [
+      "horn"
+    ],
+    "copies": 3,
+    "flavor": "Plus one to morale, minus three to hearing.",
+    "art": "cards/art/commander-s-horn.webp"
+  },
+  {
+    "id": "crinfrid-reavers-dragon-hunter",
+    "name": "Crinfrid Reavers Dragon Hunter",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 5,
+    "abilities": [
+      "tight_bond"
+    ],
+    "copies": 3,
+    "flavor": "Haven't had much luck with monsters of late, so we enlisted.",
+    "art": "cards/art/crinfrid-reavers-dragon-hunter.webp"
+  },
+  {
+    "id": "crone-brewess",
+    "name": "Crone: Brewess",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 6,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "We'll cut you up, boy. A fine broth you will make.",
+    "art": "cards/art/crone-brewess.webp"
+  },
+  {
+    "id": "crone-weavess",
+    "name": "Crone: Weavess",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 6,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "I sense your pain. I see your fear...",
+    "art": "cards/art/crone-weavess.webp"
+  },
+  {
+    "id": "crone-whispess",
+    "name": "Crone: Whispess",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 6,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "I'd be your best – and last.",
+    "art": "cards/art/crone-whispess.webp"
+  },
+  {
+    "id": "cynthia",
+    "name": "Cynthia",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 4,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Cynthia's talents can be deadly. She needs a tight leash.",
+    "art": "cards/art/cynthia.webp"
+  },
+  {
+    "id": "dandelion",
+    "name": "Dandelion",
+    "faction": "neutral",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 2,
+    "abilities": [
+      "horn"
+    ],
+    "copies": 1,
+    "flavor": "Dandelion, you're a cynic, a lecher, a whoremonger, a liar – and my best friend.",
+    "art": "cards/art/dandelion.webp"
+  },
+  {
+    "id": "decoy",
+    "name": "Decoy",
+    "faction": "neutral",
+    "type": "special",
+    "rows": [],
+    "strength": null,
+    "abilities": [
+      "decoy"
+    ],
+    "copies": 3,
+    "flavor": "When you run out of peasants, decoys also make decent arrow fodder.",
+    "art": "cards/art/decoy.webp"
+  },
+  {
+    "id": "dennis-cranmer",
+    "name": "Dennis Cranmer",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I know how to carry out orders, so you can shove you advice up your coal chute.",
+    "art": "cards/art/dennis-cranmer.webp"
+  },
+  {
+    "id": "dethmold",
+    "name": "Dethmold",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I once made a prisoner vomit his own entrails... Ah, good times...",
+    "art": "cards/art/dethmold.webp"
+  },
+  {
+    "id": "dol-blathanna-archer",
+    "name": "Dol Blathanna Archer",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 4,
+    "abilities": [],
+    "copies": 2,
+    "flavor": "Take another step, dh'oine. You'd look better with an arrow between your eyes.",
+    "art": "cards/art/dol-blathanna-archer.webp"
+  },
+  {
+    "id": "dol-blathanna-scout-1",
+    "name": "Dol Blathanna Scout",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 6,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "They track like hounds, run like deer and kill like cold-hearted bastards.",
+    "art": "cards/art/dol-blathanna-scout-1.webp"
+  },
+  {
+    "id": "dol-blathanna-scout-2",
+    "name": "Dol Blathanna Scout",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 6,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "They track like hounds, run like deer and kill like cold-hearted bastards.",
+    "art": "cards/art/dol-blathanna-scout-2.webp"
+  },
+  {
+    "id": "dol-blathanna-scout-3",
+    "name": "Dol Blathanna Scout",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 6,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "They track like hounds, run like deer and kill like cold-hearted bastards.",
+    "art": "cards/art/dol-blathanna-scout-3.webp"
+  },
+  {
+    "id": "draug",
+    "name": "Draug",
+    "faction": "monsters",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Some men cannot admit defeat. Some keep fighting from beyond the grave.",
+    "art": "cards/art/draug.webp"
+  },
+  {
+    "id": "dun-banner-medic",
+    "name": "Dun Banner Medic",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 5,
+    "abilities": [
+      "medic"
+    ],
+    "copies": 1,
+    "flavor": "Stitch red to red, white to white, and everything will be all right.",
+    "art": "cards/art/dun-banner-medic.webp"
+  },
+  {
+    "id": "dwarven-skirmisher-1",
+    "name": "Dwarven Skirmisher",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 3,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Worked a pickaxe all me life. Battleaxe won't be any trouble.",
+    "art": "cards/art/dwarven-skirmisher-1.webp"
+  },
+  {
+    "id": "dwarven-skirmisher-2",
+    "name": "Dwarven Skirmisher",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 3,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Worked a pickaxe all me life. Battleaxe won't be any trouble.",
+    "art": "cards/art/dwarven-skirmisher-2.webp"
+  },
+  {
+    "id": "dwarven-skirmisher-3",
+    "name": "Dwarven Skirmisher",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 3,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Worked a pickaxe all me life. Battleaxe won't be any trouble.",
+    "art": "cards/art/dwarven-skirmisher-3.webp"
+  },
+  {
+    "id": "earth-elemental",
+    "name": "Earth Elemental",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "How to fight an earth elemental? You don't. You run. Fast as you can.",
+    "art": "cards/art/earth-elemental.webp"
+  },
+  {
+    "id": "eithne",
+    "name": "Eithné",
+    "faction": "scoiatael",
+    "type": "hero",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "The dryad queen has eyes of molten silver, and a heart of cold-forged steel.",
+    "art": "cards/art/eithne.webp"
+  },
+  {
+    "id": "elven-skirmisher-1",
+    "name": "Elven Skirmisher",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "No matter what you may have heard, elves don't take human scalps. Too much lice.",
+    "art": "cards/art/elven-skirmisher-1.webp"
+  },
+  {
+    "id": "elven-skirmisher-2",
+    "name": "Elven Skirmisher",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "No matter what you may have heard, elves don't take human scalps. Too much lice.",
+    "art": "cards/art/elven-skirmisher-2.webp"
+  },
+  {
+    "id": "elven-skirmisher-3",
+    "name": "Elven Skirmisher",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "No matter what you may have heard, elves don't take human scalps. Too much lice.",
+    "art": "cards/art/elven-skirmisher-3.webp"
+  },
+  {
+    "id": "emhyr-var-emreis-emperor-of-nilfgaard",
+    "name": "Emhyr var Emreis: Emperor of Nilfgaard",
+    "faction": "nilfgaard",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Look at 3 random cards from your opponent's hand.",
+    "copies": 1,
+    "flavor": "Your motives do not interest me. Only results.",
+    "art": "cards/art/emhyr-var-emreis-emperor-of-nilfgaard.webp"
+  },
+  {
+    "id": "emhyr-var-emreis-his-imperial-majesty",
+    "name": "Emhyr var Emreis: His Imperial Majesty",
+    "faction": "nilfgaard",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Pick a Torrential Rain card from your deck and play it instantly.",
+    "copies": 1,
+    "flavor": "The skies wept when my Pavetta died. They will not weep for me.",
+    "art": "cards/art/emhyr-var-emreis-his-imperial-majesty.webp"
+  },
+  {
+    "id": "emhyr-var-emreis-invader-of-the-north",
+    "name": "Emhyr var Emreis: Invader of the North",
+    "faction": "nilfgaard",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Abilities that restore a unit to the battlefield restore a randomly-chosen unit. Affects both players.",
+    "copies": 1,
+    "flavor": "Emperors command multitudes, yet cannot control two things: their time and their hearts.",
+    "art": "cards/art/emhyr-var-emreis-invader-of-the-north.webp"
+  },
+  {
+    "id": "emhyr-var-emreis-the-relentless",
+    "name": "Emhyr var Emreis: The Relentless",
+    "faction": "nilfgaard",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Draw a card from your opponent's discard pile.",
+    "copies": 1,
+    "flavor": "They do not call me the Patient. Take care they do not call you the Headless.",
+    "art": "cards/art/emhyr-var-emreis-the-relentless.webp"
+  },
+  {
+    "id": "emhyr-var-emreis-the-white-flame",
+    "name": "Emhyr var Emreis: The White Flame",
+    "faction": "nilfgaard",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Cancel your opponent's Leader Ability.",
+    "copies": 1,
+    "flavor": "A sword is but one of many tools at a ruler's disposal.",
+    "art": "cards/art/emhyr-var-emreis-the-white-flame.webp"
+  },
+  {
+    "id": "emiel-regis-rohellec-terzieff",
+    "name": "Emiel Regis Rohellec Terzieff",
+    "faction": "neutral",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Men, the polite ones, at least, call me a monster. A blood-drinking freak.",
+    "art": "cards/art/emiel-regis-rohellec-terzieff.webp"
+  },
+  {
+    "id": "endrega",
+    "name": "Endrega",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "The nest! Take out the nest, or the bastards'll just keep coming!",
+    "art": "cards/art/endrega.webp"
+  },
+  {
+    "id": "eredin-breacc-glas-the-treacherous",
+    "name": "Eredin Bréacc Glas: The Treacherous",
+    "faction": "monsters",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Doubles strength of all spies.",
+    "copies": 1,
+    "flavor": "I'm enjoying this. You are my toy.",
+    "art": "cards/art/eredin-breacc-glas-the-treacherous.webp"
+  },
+  {
+    "id": "eredin-bringer-of-death",
+    "name": "Eredin: Bringer of Death",
+    "faction": "monsters",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Restore a card from your discard pile to your hand.",
+    "copies": 1,
+    "flavor": "Go on. Show me your spins, pirouettes and feints. I want to watch.",
+    "art": "cards/art/eredin-bringer-of-death.webp"
+  },
+  {
+    "id": "eredin-commander-of-the-red-riders",
+    "name": "Eredin: Commander of the Red Riders",
+    "faction": "monsters",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Double the strength of all your Close Combat units (unless a Commander's Horn is also present on that row).",
+    "copies": 1,
+    "flavor": "Have some dignity. You know how this will end.",
+    "art": "cards/art/eredin-commander-of-the-red-riders.webp"
+  },
+  {
+    "id": "eredin-destroyer-of-worlds",
+    "name": "Eredin: Destroyer of Worlds",
+    "faction": "monsters",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Discard 2 cards and draw 1 card of your choice from your deck.",
+    "copies": 1,
+    "flavor": "It is unavoidable.",
+    "art": "cards/art/eredin-destroyer-of-worlds.webp"
+  },
+  {
+    "id": "eredin-king-of-the-wild-hunt",
+    "name": "Eredin: King of the Wild Hunt",
+    "faction": "monsters",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Pick any weather card from your deck and play it instantly.",
+    "copies": 1,
+    "flavor": "I've long awaited this...",
+    "art": "cards/art/eredin-king-of-the-wild-hunt.webp"
+  },
+  {
+    "id": "esterad-thyssen",
+    "name": "Esterad Thyssen",
+    "faction": "northern",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Like all Thyssen men, he was tall, powefully built and criminally handsome.",
+    "art": "cards/art/esterad-thyssen.webp"
+  },
+  {
+    "id": "etolian-auxiliary-archers-1",
+    "name": "Etolian Auxiliary Archers",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 1,
+    "abilities": [
+      "medic"
+    ],
+    "copies": 1,
+    "flavor": "Double or nothing, aim for his cock.",
+    "art": "cards/art/etolian-auxiliary-archers-1.webp"
+  },
+  {
+    "id": "etolian-auxiliary-archers-2",
+    "name": "Etolian Auxiliary Archers",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 1,
+    "abilities": [
+      "medic"
+    ],
+    "copies": 1,
+    "flavor": "Double or nothing, aim for his cock.",
+    "art": "cards/art/etolian-auxiliary-archers-2.webp"
+  },
+  {
+    "id": "fiend",
+    "name": "Fiend",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "A fiend looks a bit like a deer. An enormous, evil deer.",
+    "art": "cards/art/fiend.webp"
+  },
+  {
+    "id": "filavandrel-aen-fidhail",
+    "name": "Filavandrel aen Fidhail",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 6,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "Though we are now few and scattered, our hearts burn brighter than ever.",
+    "art": "cards/art/filavandrel-aen-fidhail.webp"
+  },
+  {
+    "id": "fire-elemental",
+    "name": "Fire Elemental",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Fire is so delightful.",
+    "art": "cards/art/fire-elemental.webp"
+  },
+  {
+    "id": "foglet",
+    "name": "Foglet",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 2,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Fog creeps on little cat feet. Foglets creep over the bodies of their victims.",
+    "art": "cards/art/foglet.webp"
+  },
+  {
+    "id": "foltest-king-of-temeria",
+    "name": "Foltest: King of Temeria",
+    "faction": "northern",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Pick an Impenetrable Fog card from your deck and play it instantly.",
+    "copies": 1,
+    "flavor": "It is natural and beautiful that a man should love his sister.",
+    "art": "cards/art/foltest-king-of-temeria.webp"
+  },
+  {
+    "id": "foltest-lord-commander-of-the-north",
+    "name": "Foltest: Lord Commander of the North",
+    "faction": "northern",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Clear any weather effects (resulting from Biting Frost, Torrential Rain or Impenetrable Fog cards) in play.",
+    "copies": 1,
+    "flavor": "Sod advisors and their schemes. I place my trust in my soldiers' blades.",
+    "art": "cards/art/foltest-lord-commander-of-the-north.webp"
+  },
+  {
+    "id": "foltest-son-of-medell",
+    "name": "Foltest: Son of Medell",
+    "faction": "northern",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Destroy your enemy's strongest Ranged Combat unit(s) if the combined strength of all his or her Ranged Combat units is 10 or more.",
+    "copies": 1,
+    "flavor": "Dammit, I rule this land and I refuse to creep around its corners.",
+    "art": "cards/art/foltest-son-of-medell.webp"
+  },
+  {
+    "id": "foltest-the-siegemaster",
+    "name": "Foltest: The Siegemaster",
+    "faction": "northern",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Doubles the strength of all your Siege units (unless a Commander's Horn is also present on that row).",
+    "copies": 1,
+    "flavor": "A well-aimed ballista razes not just the enemy's walls, but his morale as well.",
+    "art": "cards/art/foltest-the-siegemaster.webp"
+  },
+  {
+    "id": "foltest-the-steel-forged",
+    "name": "Foltest: The Steel-Forged",
+    "faction": "northern",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Destroy your enemy's strongest Siege unit(s) if the combined strength of all his or her Siege units is 10 or more.",
+    "copies": 1,
+    "flavor": "A beautiful day for battle.",
+    "art": "cards/art/foltest-the-steel-forged.webp"
+  },
+  {
+    "id": "forktail",
+    "name": "Forktail",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Fork tails... Bah! Fuckers' tails're more like cleavers.",
+    "art": "cards/art/forktail.webp"
+  },
+  {
+    "id": "francesca-findabair-daisy-of-the-valley",
+    "name": "Francesca Findabair: Daisy of the Valley",
+    "faction": "scoiatael",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Draw an extra card at the beginning of the battle.",
+    "copies": 1,
+    "flavor": "Do not let my beauty distract your aim.",
+    "art": "cards/art/francesca-findabair-daisy-of-the-valley.webp"
+  },
+  {
+    "id": "francesca-findabair-hope-of-the-aen-seidhe",
+    "name": "Francesca Findabair: Hope of the Aen Seidhe",
+    "faction": "scoiatael",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Move agile unites to whichever valid row maximizes their strength (don't move units already in optimal row).",
+    "copies": 1,
+    "flavor": "Daede sian caente, Aen Seidhe en'allane ael coeden...",
+    "art": "cards/art/francesca-findabair-hope-of-the-aen-seidhe.webp"
+  },
+  {
+    "id": "francesca-findabair-pureblood-elf",
+    "name": "Francesca Findabair: Pureblood Elf",
+    "faction": "scoiatael",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Pick a Biting Frost card from your deck and play it instantly.",
+    "copies": 1,
+    "flavor": "Ash shall fertilize the soil. By spring, the valley shall bloom once more.",
+    "art": "cards/art/francesca-findabair-pureblood-elf.webp"
+  },
+  {
+    "id": "francesca-findabair-queen-of-dol-blathanna",
+    "name": "Francesca Findabair: Queen of Dol Blathanna",
+    "faction": "scoiatael",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Destroy your enemy's Close Combat unit(s) if the combined strength of all his or her Close Combat units is 10 or more.",
+    "copies": 1,
+    "flavor": "To live in peace, we first must kill. This is human oppression's cruel finale.",
+    "art": "cards/art/francesca-findabair-queen-of-dol-blathanna.webp"
+  },
+  {
+    "id": "francesca-findabair-the-beautiful",
+    "name": "Francesca Findabair: The Beautiful",
+    "faction": "scoiatael",
+    "type": "leader",
+    "rows": [],
+    "strength": null,
+    "abilities": [],
+    "leaderText": "Doubles the strength of all your Ranged Combat units (unless a Commander's Horn is also present on that row).",
+    "copies": 1,
+    "flavor": "The Elder Races have forgotten more than humans can ever hope to know.",
+    "art": "cards/art/francesca-findabair-the-beautiful.webp"
+  },
+  {
+    "id": "frightener",
+    "name": "Frightener",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "\"What have I done?\" the mage cried out, frightened of his own creation.",
+    "art": "cards/art/frightener.webp"
+  },
+  {
+    "id": "fringilla-vigo",
+    "name": "Fringilla Vigo",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Magic is the highest good. It transcends all borders and divisions.",
+    "art": "cards/art/fringilla-vigo.webp"
+  },
+  {
+    "id": "gargoyle",
+    "name": "Gargoyle",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Ancient sculptors' nightmarish fantasies, brought to life by bored mages.",
+    "art": "cards/art/gargoyle.webp"
+  },
+  {
+    "id": "geralt-of-rivia",
+    "name": "Geralt of Rivia",
+    "faction": "neutral",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 15,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "If that's what it takes to save the world, it's better to let that world die.",
+    "art": "cards/art/geralt-of-rivia.webp"
+  },
+  {
+    "id": "ghoul-1",
+    "name": "Ghoul",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 1,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "If ghouls are part of the Circle of Life... then it's a damn vicious circle.",
+    "art": "cards/art/ghoul-1.webp"
+  },
+  {
+    "id": "ghoul-2",
+    "name": "Ghoul",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 1,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "If ghouls are part of the Circle of Life... then it's a damn vicious circle.",
+    "art": "cards/art/ghoul-2.webp"
+  },
+  {
+    "id": "ghoul-3",
+    "name": "Ghoul",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 1,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "If ghouls are part of the Circle of Life... then it's a damn vicious circle.",
+    "art": "cards/art/ghoul-3.webp"
+  },
+  {
+    "id": "grave-hag",
+    "name": "Grave Hag",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Their long tongues're for slurping marrow – and whipping prey.",
+    "art": "cards/art/grave-hag.webp"
+  },
+  {
+    "id": "griffin",
+    "name": "Griffin",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Griffins like to toy with their prey. Eat'em alive, piece by piece.",
+    "art": "cards/art/griffin.webp"
+  },
+  {
+    "id": "harpy",
+    "name": "Harpy",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "There are many species of harpy, and all are kleptomaniacs.",
+    "art": "cards/art/harpy.webp"
+  },
+  {
+    "id": "havekar-healer-1",
+    "name": "Havekar Healer",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 0,
+    "abilities": [
+      "medic"
+    ],
+    "copies": 1,
+    "flavor": "Sure, I'll patch you up. Gonna cost you, though.",
+    "art": "cards/art/havekar-healer-1.webp"
+  },
+  {
+    "id": "havekar-healer-2",
+    "name": "Havekar Healer",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 0,
+    "abilities": [
+      "medic"
+    ],
+    "copies": 1,
+    "flavor": "Sure, I'll patch you up. Gonna cost you, though.",
+    "art": "cards/art/havekar-healer-2.webp"
+  },
+  {
+    "id": "havekar-healer-3",
+    "name": "Havekar Healer",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 0,
+    "abilities": [
+      "medic"
+    ],
+    "copies": 1,
+    "flavor": "Sure, I'll patch you up. Gonna cost you, though.",
+    "art": "cards/art/havekar-healer-3.webp"
+  },
+  {
+    "id": "havekar-smuggler-1",
+    "name": "Havekar Smuggler",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "I fight for whoever's paying the best. Or whoever's easiest to rob.",
+    "art": "cards/art/havekar-smuggler-1.webp"
+  },
+  {
+    "id": "havekar-smuggler-2",
+    "name": "Havekar Smuggler",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "I fight for whoever's paying the best. Or whoever's easiest to rob.",
+    "art": "cards/art/havekar-smuggler-2.webp"
+  },
+  {
+    "id": "havekar-smuggler-3",
+    "name": "Havekar Smuggler",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "I fight for whoever's paying the best. Or whoever's easiest to rob.",
+    "art": "cards/art/havekar-smuggler-3.webp"
+  },
+  {
+    "id": "heavy-zerrikanian-fire-scorpion",
+    "name": "Heavy Zerrikanian Fire Scorpion",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Not the best for taking cities, but great for razing them to the ground.",
+    "art": "cards/art/heavy-zerrikanian-fire-scorpion.webp"
+  },
+  {
+    "id": "ice-giant",
+    "name": "Ice Giant",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Fled one time in my life. From the Ice Giant. And I'm not a bit ashamed.",
+    "art": "cards/art/ice-giant.webp"
+  },
+  {
+    "id": "ida-emean-aep-sivney",
+    "name": "Ida Emean aep Sivney",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I am a Sage. My power lies in possessing knowledge. Not sharing it.",
+    "art": "cards/art/ida-emean-aep-sivney.webp"
+  },
+  {
+    "id": "imlerith",
+    "name": "Imlerith",
+    "faction": "monsters",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Ladd nahw! Kill them! Litter the earth with their entrails!",
+    "art": "cards/art/imlerith.webp"
+  },
+  {
+    "id": "impenetrable-fog",
+    "name": "Impenetrable Fog",
+    "faction": "neutral",
+    "type": "weather",
+    "rows": [],
+    "strength": null,
+    "abilities": [
+      "weather_fog"
+    ],
+    "copies": 3,
+    "flavor": "A good commander's dream... a bad one's horror.",
+    "art": "cards/art/impenetrable-fog.webp"
+  },
+  {
+    "id": "impera-brigade-guard",
+    "name": "Impera Brigade Guard",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 3,
+    "abilities": [
+      "tight_bond"
+    ],
+    "copies": 4,
+    "flavor": "The Impera Brigade never surrenders. Ever.",
+    "art": "cards/art/impera-brigade-guard.webp"
+  },
+  {
+    "id": "iorveth",
+    "name": "Iorveth",
+    "faction": "scoiatael",
+    "type": "hero",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "King or beggar, what's the difference? One dh'oine less.",
+    "art": "cards/art/iorveth.webp"
+  },
+  {
+    "id": "isengrim-faoiltiarna",
+    "name": "Isengrim Faoiltiarna",
+    "faction": "scoiatael",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 10,
+    "abilities": [
+      "morale"
+    ],
+    "copies": 1,
+    "flavor": "It dawns on them once they notice my scar: a realization of imminent death.",
+    "art": "cards/art/isengrim-faoiltiarna.webp"
+  },
+  {
+    "id": "john-natalis",
+    "name": "John Natalis",
+    "faction": "northern",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "That square should bear the names of my soldiers, of the dead. Not mine.",
+    "art": "cards/art/john-natalis.webp"
+  },
+  {
+    "id": "kaedweni-siege-expert",
+    "name": "Kaedweni Siege Expert",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 1,
+    "abilities": [
+      "morale"
+    ],
+    "copies": 3,
+    "flavor": "\"You gotta recalibrate the arm by five degrees.\" \"Do what by the what now?\"",
+    "art": "cards/art/kaedweni-siege-expert.webp"
+  },
+  {
+    "id": "kayran",
+    "name": "Kayran",
+    "faction": "monsters",
+    "type": "hero",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 8,
+    "abilities": [
+      "agile",
+      "morale"
+    ],
+    "copies": 1,
+    "flavor": "Kill a kayran? Simple. Take your best sword... then sell it and hire a witcher.",
+    "art": "cards/art/kayran.webp"
+  },
+  {
+    "id": "keira-metz",
+    "name": "Keira Metz",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "If I'm to die today, I wish to look smashing for the occasion.",
+    "art": "cards/art/keira-metz.webp"
+  },
+  {
+    "id": "leshen",
+    "name": "Leshen",
+    "faction": "monsters",
+    "type": "hero",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "We never hunt in these woods. Not even if it means the whole village starves.",
+    "art": "cards/art/leshen.webp"
+  },
+  {
+    "id": "letho-of-gulet",
+    "name": "Letho of Gulet",
+    "faction": "nilfgaard",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Witchers never die in their beds.",
+    "art": "cards/art/letho-of-gulet.webp"
+  },
+  {
+    "id": "mahakaman-defender-1",
+    "name": "Mahakaman Defender",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "I'm telling ye, we're born fer battle – we slash straight at their knees!",
+    "art": "cards/art/mahakaman-defender-1.webp"
+  },
+  {
+    "id": "mahakaman-defender-2",
+    "name": "Mahakaman Defender",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "I'm telling ye, we're born fer battle – we slash straight at their knees!",
+    "art": "cards/art/mahakaman-defender-2.webp"
+  },
+  {
+    "id": "mahakaman-defender-3",
+    "name": "Mahakaman Defender",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "I'm telling ye, we're born fer battle – we slash straight at their knees!",
+    "art": "cards/art/mahakaman-defender-3.webp"
+  },
+  {
+    "id": "mahakaman-defender-4",
+    "name": "Mahakaman Defender",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "I'm telling ye, we're born fer battle – we slash straight at their knees!",
+    "art": "cards/art/mahakaman-defender-4.webp"
+  },
+  {
+    "id": "mahakaman-defender-5",
+    "name": "Mahakaman Defender",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "I'm telling ye, we're born fer battle – we slash straight at their knees!",
+    "art": "cards/art/mahakaman-defender-5.webp"
+  },
+  {
+    "id": "menno-coehoorn",
+    "name": "Menno Coehoorn",
+    "faction": "nilfgaard",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 10,
+    "abilities": [
+      "medic"
+    ],
+    "copies": 1,
+    "flavor": "I'll take an attentive reconnaissance unit over a fine cavalry brigade any day.",
+    "art": "cards/art/menno-coehoorn.webp"
+  },
+  {
+    "id": "milva",
+    "name": "Milva",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 10,
+    "abilities": [
+      "morale"
+    ],
+    "copies": 1,
+    "flavor": "With each arrow I loose, I think of my da. He's be proud. I think.",
+    "art": "cards/art/milva.webp"
+  },
+  {
+    "id": "morteisen",
+    "name": "Morteisen",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 3,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "No Nordling pikemen or dwarven spearbearers can hope to best trained cavalry.",
+    "art": "cards/art/morteisen.webp"
+  },
+  {
+    "id": "morvran-voorhis",
+    "name": "Morvran Voorhis",
+    "faction": "nilfgaard",
+    "type": "hero",
+    "rows": [
+      "siege"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Summer sun reflecting in the quiet waters of the Alba – that's Nilfgaard to me.",
+    "art": "cards/art/morvran-voorhis.webp"
+  },
+  {
+    "id": "mysterious-elf",
+    "name": "Mysterious Elf",
+    "faction": "neutral",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 0,
+    "abilities": [
+      "spy"
+    ],
+    "copies": 1,
+    "flavor": "You humans have...unusual tastes.",
+    "art": "cards/art/mysterious-elf.webp"
+  },
+  {
+    "id": "nausicaa-cavalry-rider",
+    "name": "Nausicaa Cavalry Rider",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 2,
+    "abilities": [
+      "tight_bond"
+    ],
+    "copies": 3,
+    "flavor": "The Emperor will teach the North discipline.",
+    "art": "cards/art/nausicaa-cavalry-rider.webp"
+  },
+  {
+    "id": "nekker-1",
+    "name": "Nekker",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 2,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Damn things are almost cute, if you ignore the whole vicious killer aspect.",
+    "art": "cards/art/nekker-1.webp"
+  },
+  {
+    "id": "nekker-2",
+    "name": "Nekker",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 2,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Damn things are almost cute, if you ignore the whole vicious killer aspect.",
+    "art": "cards/art/nekker-2.webp"
+  },
+  {
+    "id": "nekker-3",
+    "name": "Nekker",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 2,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Damn things are almost cute, if you ignore the whole vicious killer aspect.",
+    "art": "cards/art/nekker-3.webp"
+  },
+  {
+    "id": "philippa-eilhart",
+    "name": "Philippa Eilhart",
+    "faction": "northern",
+    "type": "hero",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Soon the power of kings will wither, and the Lodge shall seize its rightful place.",
+    "art": "cards/art/philippa-eilhart.webp"
+  },
+  {
+    "id": "plague-maiden",
+    "name": "Plague Maiden",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "The sick rave about a boil-pocked woman surrounded by herds of rabid rats...",
+    "art": "cards/art/plague-maiden.webp"
+  },
+  {
+    "id": "poor-fucking-infantry",
+    "name": "Poor Fucking Infantry",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 1,
+    "abilities": [
+      "tight_bond"
+    ],
+    "copies": 4,
+    "flavor": "I's a war veteran! ... spare me a crown?",
+    "art": "cards/art/poor-fucking-infantry.webp"
+  },
+  {
+    "id": "prince-stennis",
+    "name": "Prince Stennis",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "spy"
+    ],
+    "copies": 1,
+    "flavor": "He ploughin' wears golden armor. Golden. 'Course he's an arsehole.",
+    "art": "cards/art/prince-stennis.webp"
+  },
+  {
+    "id": "puttkammer",
+    "name": "Puttkammer",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 3,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Learned a lot at Braibant Military Academy. How to scrub potatoes, for instance.",
+    "art": "cards/art/puttkammer.webp"
+  },
+  {
+    "id": "rainfarn",
+    "name": "Rainfarn",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "You'll die as painfully as that pathetic traitor Windhalm did.",
+    "art": "cards/art/rainfarn.webp"
+  },
+  {
+    "id": "redanian-foot-soldier-1",
+    "name": "Redanian Foot Soldier",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 1,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I've bled for Redania! I've killed for Redania.. Dammit, I've even raped for Redania!",
+    "art": "cards/art/redanian-foot-soldier-1.webp"
+  },
+  {
+    "id": "redanian-foot-soldier-2",
+    "name": "Redanian Foot Soldier",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 1,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I've bled for Redania! I've killed for Redania.. Dammit, I've even raped for Redania!",
+    "art": "cards/art/redanian-foot-soldier-2.webp"
+  },
+  {
+    "id": "renuald-aep-matsen",
+    "name": "Renuald aep Matsen",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "They say the Impera fear nothing. Untrue. Renuald scares them shitless.",
+    "art": "cards/art/renuald-aep-matsen.webp"
+  },
+  {
+    "id": "riordain",
+    "name": "Riordain",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 1,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Stare into their eyes, feast on their terror. Then go in for the kill.",
+    "art": "cards/art/riordain.webp"
+  },
+  {
+    "id": "rotten-mangonel",
+    "name": "Rotten Mangonel",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 3,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "The rotten smell brings back childhood memories.",
+    "art": "cards/art/rotten-mangonel.webp"
+  },
+  {
+    "id": "sabrina-glevissig",
+    "name": "Sabrina Glevissig",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 4,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Daughter of the Kaedweni Wilderness.",
+    "art": "cards/art/sabrina-glevissig.webp"
+  },
+  {
+    "id": "saesenthessis",
+    "name": "Saesenthessis",
+    "faction": "scoiatael",
+    "type": "hero",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Beautiful, pure, fierce - the perfect icon for a rebellion.",
+    "art": "cards/art/saesenthessis.webp"
+  },
+  {
+    "id": "scorch",
+    "name": "Scorch",
+    "faction": "neutral",
+    "type": "special",
+    "rows": [],
+    "strength": null,
+    "abilities": [
+      "scorch"
+    ],
+    "copies": 3,
+    "flavor": "Pillars of flame turn the mightiest to ash. All other tremble in shock and awe.",
+    "art": "cards/art/scorch.webp"
+  },
+  {
+    "id": "sheldon-skaggs",
+    "name": "Sheldon Skaggs",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 4,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I was there, on the front lines! Right where the fightin' was thickest!",
+    "art": "cards/art/sheldon-skaggs.webp"
+  },
+  {
+    "id": "shilard-fitz-oesterlen",
+    "name": "Shilard Fitz-Oesterlen",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 7,
+    "abilities": [
+      "spy"
+    ],
+    "copies": 1,
+    "flavor": "Warfare is mere sound and fury – diplomacy is what truly shapes history.",
+    "art": "cards/art/shilard-fitz-oesterlen.webp"
+  },
+  {
+    "id": "siege-engineer",
+    "name": "Siege Engineer",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Wielded correctly, a protractor can be a deadly weapon.",
+    "art": "cards/art/siege-engineer.webp"
+  },
+  {
+    "id": "siege-technician",
+    "name": "Siege Technician",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 0,
+    "abilities": [
+      "medic"
+    ],
+    "copies": 1,
+    "flavor": "I never miss twice.",
+    "art": "cards/art/siege-technician.webp"
+  },
+  {
+    "id": "siege-tower",
+    "name": "Siege Tower",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I love the clamor of siege towers in the morning. Sounds like victory.",
+    "art": "cards/art/siege-tower.webp"
+  },
+  {
+    "id": "siegfried-of-denesle",
+    "name": "Siegfried of Denesle",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "We're on the same side, witcher. You'll realize this one day.",
+    "art": "cards/art/siegfried-of-denesle.webp"
+  },
+  {
+    "id": "sigismund-dijkstra",
+    "name": "Sigismund Dijkstra",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [
+      "spy"
+    ],
+    "copies": 1,
+    "flavor": "Gwent's like politics, just more honest.",
+    "art": "cards/art/sigismund-dijkstra.webp"
+  },
+  {
+    "id": "sile-de-tansarville",
+    "name": "Síle de Tansarville",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "The Lodge lacks humility. Our lust for power may yet be our undoing.",
+    "art": "cards/art/sile-de-tansarville.webp"
+  },
+  {
+    "id": "stefan-skellen",
+    "name": "Stefan Skellen",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 9,
+    "abilities": [
+      "spy"
+    ],
+    "copies": 1,
+    "flavor": "My mark scars the face of our future empress. That is my proudest achievement.",
+    "art": "cards/art/stefan-skellen.webp"
+  },
+  {
+    "id": "sweers",
+    "name": "Sweers",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "And hands off the girl! Whatever we may be, we're not savages.",
+    "art": "cards/art/sweers.webp"
+  },
+  {
+    "id": "thaler",
+    "name": "Thaler",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 1,
+    "abilities": [
+      "spy"
+    ],
+    "copies": 1,
+    "flavor": "Fuck off! We aren't all ploughin' philanderers. Some of us have depth...",
+    "art": "cards/art/thaler.webp"
+  },
+  {
+    "id": "tibor-eggebracht",
+    "name": "Tibor Eggebracht",
+    "faction": "nilfgaard",
+    "type": "hero",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Albaaaa! Forward!! Alba! Long live the Emperor!",
+    "art": "cards/art/tibor-eggebracht.webp"
+  },
+  {
+    "id": "torrential-rain",
+    "name": "Torrential Rain",
+    "faction": "neutral",
+    "type": "weather",
+    "rows": [],
+    "strength": null,
+    "abilities": [
+      "weather_rain"
+    ],
+    "copies": 3,
+    "flavor": "Even the rain in this land smells like piss.",
+    "art": "cards/art/torrential-rain.webp"
+  },
+  {
+    "id": "toruviel",
+    "name": "Toruviel",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I'd gladly kill you from up close, stare in your eyes... But you reek, human.",
+    "art": "cards/art/toruviel.webp"
+  },
+  {
+    "id": "trebuchet-1",
+    "name": "Trebuchet",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Castle won't batter itself down, now will it? Get them trebuchets rollin'!",
+    "art": "cards/art/trebuchet-1.webp"
+  },
+  {
+    "id": "trebuchet-2",
+    "name": "Trebuchet",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Castle won't batter itself down, now will it? Get them trebuchets rollin'!",
+    "art": "cards/art/trebuchet-2.webp"
+  },
+  {
+    "id": "triss-merigold",
+    "name": "Triss Merigold",
+    "faction": "neutral",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 7,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "I can take care of myself. Trust me.",
+    "art": "cards/art/triss-merigold.webp"
+  },
+  {
+    "id": "vampire-bruxa",
+    "name": "Vampire: Bruxa",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "A vile, bloodthirsty, man-eating hag. Kind of like my mother-in-law.",
+    "art": "cards/art/vampire-bruxa.webp"
+  },
+  {
+    "id": "vampire-ekimmara",
+    "name": "Vampire: Ekimmara",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Who would think overgrown bats would have a taste for gaudy jewelry?",
+    "art": "cards/art/vampire-ekimmara.webp"
+  },
+  {
+    "id": "vampire-fleder",
+    "name": "Vampire: Fleder",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Higher vampires embrace their victims. Fleders rip them to shreds.",
+    "art": "cards/art/vampire-fleder.webp"
+  },
+  {
+    "id": "vampire-garkain",
+    "name": "Vampire: Garkain",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Blood-drinkers and corpse eaters so foul their very ugliness paralyses foes.",
+    "art": "cards/art/vampire-garkain.webp"
+  },
+  {
+    "id": "vampire-katakan",
+    "name": "Vampire: Katakan",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "muster"
+    ],
+    "copies": 1,
+    "flavor": "Drinking the blood of the Continent since the Conjunction.",
+    "art": "cards/art/vampire-katakan.webp"
+  },
+  {
+    "id": "vanhemar",
+    "name": "Vanhemar",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 4,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "For a fire mage, he's not very... flamboyant.",
+    "art": "cards/art/vanhemar.webp"
+  },
+  {
+    "id": "vattier-de-rideaux",
+    "name": "Vattier de Rideaux",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 4,
+    "abilities": [
+      "spy"
+    ],
+    "copies": 1,
+    "flavor": "There's never been a problem a well-planned assassination couldn't solve.",
+    "art": "cards/art/vattier-de-rideaux.webp"
+  },
+  {
+    "id": "vernon-roche",
+    "name": "Vernon Roche",
+    "faction": "northern",
+    "type": "hero",
+    "rows": [
+      "close"
+    ],
+    "strength": 10,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "A patriot... and a real son of a bitch.",
+    "art": "cards/art/vernon-roche.webp"
+  },
+  {
+    "id": "ves",
+    "name": "Ves",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Better to live one day as a king than a whole life as a beggar.",
+    "art": "cards/art/ves.webp"
+  },
+  {
+    "id": "vesemir",
+    "name": "Vesemir",
+    "faction": "neutral",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 6,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "If you're to be hanged, ask for water. Anything can happen before they fetch it.",
+    "art": "cards/art/vesemir.webp"
+  },
+  {
+    "id": "villentretenmerth",
+    "name": "Villentretenmerth",
+    "faction": "neutral",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 7,
+    "abilities": [
+      "scorch_close"
+    ],
+    "copies": 1,
+    "flavor": "Also calls himself Borkh Three Jackdaws… he's not the best at names.",
+    "art": "cards/art/villentretenmerth.webp"
+  },
+  {
+    "id": "vreemde",
+    "name": "Vreemde",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 2,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Discipline is the Empire's deadliest weapon.",
+    "art": "cards/art/vreemde.webp"
+  },
+  {
+    "id": "vrihedd-brigade-recruit",
+    "name": "Vrihedd Brigade Recruit",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 4,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Hatred burns brighter than any fire, and cuts deeper than any blade.",
+    "art": "cards/art/vrihedd-brigade-recruit.webp"
+  },
+  {
+    "id": "vrihedd-brigade-veteran-1",
+    "name": "Vrihedd Brigade Veteran",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 5,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "\"Vrihedd? What's that mean?\" \"Trouble.\"",
+    "art": "cards/art/vrihedd-brigade-veteran-1.webp"
+  },
+  {
+    "id": "vrihedd-brigade-veteran-2",
+    "name": "Vrihedd Brigade Veteran",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 5,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "\"Vrihedd? What's that mean?\" \"Trouble.\"",
+    "art": "cards/art/vrihedd-brigade-veteran-2.webp"
+  },
+  {
+    "id": "werewolf",
+    "name": "Werewolf",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Wolves aren't as bad as they say. Werewolves, though – they're worse.",
+    "art": "cards/art/werewolf.webp"
+  },
+  {
+    "id": "wyvern",
+    "name": "Wyvern",
+    "faction": "monsters",
+    "type": "unit",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 2,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Imagine a cross between a winged snake and a nightmare. Wyverns are worse.",
+    "art": "cards/art/wyvern.webp"
+  },
+  {
+    "id": "yaevinn",
+    "name": "Yaevinn",
+    "faction": "scoiatael",
+    "type": "unit",
+    "rows": [
+      "close",
+      "ranged"
+    ],
+    "strength": 6,
+    "abilities": [
+      "agile"
+    ],
+    "copies": 1,
+    "flavor": "We are the drops of rain that together make a ferocious storm.",
+    "art": "cards/art/yaevinn.webp"
+  },
+  {
+    "id": "yarpen-zigrin",
+    "name": "Yarpen Zigrin",
+    "faction": "northern",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 1,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "The world belongs to whoever's best at crackin' skulls and impregnatin' lasses.",
+    "art": "cards/art/yarpen-zigrin.webp"
+  },
+  {
+    "id": "yennefer-of-vengerberg",
+    "name": "Yennefer of Vengerberg",
+    "faction": "neutral",
+    "type": "hero",
+    "rows": [
+      "ranged"
+    ],
+    "strength": 7,
+    "abilities": [
+      "medic"
+    ],
+    "copies": 1,
+    "flavor": "Magic is Chaos, Art and Science. It's a curse, a blessing and a progression.",
+    "art": "cards/art/yennefer-of-vengerberg.webp"
+  },
+  {
+    "id": "young-emissary-1",
+    "name": "Young Emissary",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "tight_bond"
+    ],
+    "copies": 1,
+    "flavor": "If I acquit myself well, perhaps next they'll post me somewhere civilized.",
+    "art": "cards/art/young-emissary-1.webp"
+  },
+  {
+    "id": "young-emissary-2",
+    "name": "Young Emissary",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [
+      "tight_bond"
+    ],
+    "copies": 1,
+    "flavor": "If I acquit myself well, perhaps next they'll post me somewhere civilized.",
+    "art": "cards/art/young-emissary-2.webp"
+  },
+  {
+    "id": "zerrikanian-fire-scorpion",
+    "name": "Zerrikanian Fire Scorpion",
+    "faction": "nilfgaard",
+    "type": "unit",
+    "rows": [
+      "siege"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "The Zerrikanian Desert used to be a lush garden. Then these came along.",
+    "art": "cards/art/zerrikanian-fire-scorpion.webp"
+  },
+  {
+    "id": "zoltan-chivay",
+    "name": "Zoltan Chivay",
+    "faction": "neutral",
+    "type": "unit",
+    "rows": [
+      "close"
+    ],
+    "strength": 5,
+    "abilities": [],
+    "copies": 1,
+    "flavor": "Life without old mates and booze is like a woman without a rump.",
+    "art": "cards/art/zoltan-chivay.webp"
+  }
+]
