@@ -48,6 +48,7 @@ Artes e dados vêm do repositório [API-Gwent](https://github.com/day-s-ea/API-G
 - Regras completas do Gwent clássico (jogo base)
 - As 4 facções (Reinos do Norte, Nilfgaard, Scoia'tael, Monstros)
 - Montagem de baralho antes da partida, para você e para a CPU (mínimo 22 unidades, máximo 10 especiais)
+- 2 baralhos prontos por facção, inspirados nas estratégias clássicas da comunidade, e opção de baralho aleatório
 - Partida contra IA heurística
 - Desktop primeiro
 

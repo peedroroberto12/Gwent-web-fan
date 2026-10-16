@@ -13,6 +13,7 @@ export {
   countOf,
   deckProblems,
   deckStats,
+  randomDeck,
   sortForDisplay,
   MAX_SPECIALS,
   MIN_UNITS,

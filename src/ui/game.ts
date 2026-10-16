@@ -526,6 +526,8 @@ function render(overrides?: Map<string, DOMRect>) {
   root.querySelector('[data-action="sfx"]')!.addEventListener('click', () => { toggleSfx(); render(); });
   root.querySelector('[data-action="decks"]')!.addEventListener('click', leave);
 
+  fitAll(); // antes de animar, para as posições finais já estarem certas
+
   animate(root, before, {
     effects,
     overrides,
@@ -538,6 +540,35 @@ function render(overrides?: Map<string, DOMRect>) {
     },
     exit: (owner) => root.querySelector(`.piles--${owner ?? 'me'} .discard`),
   });
+}
+
+/**
+ * Cartas demais numa fileira/mão: em vez de vazar, elas se sobrepõem (como no Witcher 3).
+ * Calcula quanto falta de espaço e puxa cada carta para a esquerda por igual.
+ */
+function fitCards(container: HTMLElement) {
+  const cards = [...container.querySelectorAll<HTMLElement>(':scope > .card')];
+  for (const c of cards) c.style.marginLeft = '';
+  if (cards.length < 2) return;
+  const style = getComputedStyle(container);
+  const avail = container.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+  const gap = parseFloat(style.columnGap) || 0;
+  const width = cards[0]!.getBoundingClientRect().width;
+  const need = cards.length * width + (cards.length - 1) * gap;
+  if (need <= avail) return;
+  const overlap = (need - avail) / (cards.length - 1) + gap;
+  for (const c of cards.slice(1)) c.style.marginLeft = `${-overlap}px`;
+}
+
+function fitAll() {
+  root.querySelectorAll<HTMLElement>('.row__cards, .hand, .weather').forEach(fitCards);
+}
+
+let resizeBound = false;
+function bindResize() {
+  if (resizeBound) return;
+  resizeBound = true;
+  window.addEventListener('resize', () => { if (root?.isConnected) fitAll(); });
 }
 
 /** Escolhas (médico, roubar descarte...), cartas reveladas e fim de jogo. */
@@ -660,6 +691,7 @@ function leave() {
 
 export function mountGame(el: HTMLElement, matchSetup: MatchSetup, backToDecks: () => void) {
   root = el;
+  bindResize();
   setup = matchSetup;
   onDecks = backToDecks;
   newGame();

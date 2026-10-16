@@ -69,3 +69,27 @@ export function sortForDisplay(a: CardDef, b: CardDef): number {
   const rank = (c: CardDef) => (c.type === 'hero' ? 0 : c.type === 'unit' ? 1 : c.type === 'weather' ? 2 : 3);
   return rank(a) - rank(b) || (b.strength ?? 0) - (a.strength ?? 0) || a.name.localeCompare(b.name);
 }
+
+/**
+ * Baralho aleatório e sempre válido: líder sorteado, 22 a 28 unidades e 4 a 10 especiais,
+ * respeitando cópias e facção. `rand` devolve um número em [0, 1).
+ */
+export function randomDeck(faction: Faction, leaders: string[], rand: () => number = Math.random): { leader: string; cards: string[] } {
+  const pool = collectionFor(faction);
+  const copies = (c: CardDef) => Array<string>(c.copies).fill(c.id);
+  const units = pool.filter(isUnit).flatMap(copies);
+  const specials = pool.filter(isSpecial).flatMap(copies);
+  const shuffle = (a: string[]) => {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [a[i], a[j]] = [a[j]!, a[i]!];
+    }
+    return a;
+  };
+  const nUnits = Math.min(units.length, MIN_UNITS + Math.floor(rand() * 7));
+  const nSpecials = Math.min(specials.length, 4 + Math.floor(rand() * (MAX_SPECIALS - 3)));
+  return {
+    leader: leaders[Math.floor(rand() * leaders.length)]!,
+    cards: [...shuffle(units).slice(0, nUnits), ...shuffle(specials).slice(0, nSpecials)],
+  };
+}

@@ -21,8 +21,10 @@ import {
   factionLeaders,
   MAX_SPECIALS,
   MIN_UNITS,
+  randomDeck,
   sortForDisplay,
 } from '../engine';
+import { PRESETS, presetsFor } from '../data/presets';
 import { cardView } from './cardView';
 import { musicButton, onMusicChange, toggleMusic } from './music';
 import { playCard } from './sfx';
@@ -131,6 +133,7 @@ const ui = {
   who: 'me' as Who,
   filter: { collection: 'all' as Filter, deck: 'all' as Filter },
   hover: null as CardDef | null,
+  presetNote: '',
   flash: null as { grid: 'collection' | 'deck'; id: string } | null,
 };
 
@@ -262,10 +265,16 @@ function render() {
           <div><dt>Cartas de herói</dt><dd>${stats.heroes}</dd></div>
         </dl>
 
-        <div class="db__buttons">
-          <button class="btn btn--ghost btn--small" data-action="default">Baralho padrão</button>
+        <div class="db__presets">
+          <select class="db__select" data-action="preset" aria-label="Baralhos prontos">
+            <option value="">Baralhos prontos…</option>
+            ${presetsFor(cfg.faction).map((p) => `<option value="${p.id}">${p.name}</option>`).join('')}
+            <option value="__default">Coleção completa</option>
+            <option value="__random">Aleatório</option>
+          </select>
           <button class="btn btn--ghost btn--small" data-action="clear">Esvaziar</button>
         </div>
+        ${ui.presetNote ? `<p class="db__preset-note">${ui.presetNote}</p>` : ''}
         <button class="btn db__start" data-action="start" ${problems.length ? 'disabled' : ''}>Começar partida</button>
         ${problems.length ? `<ul class="db__problems">${problems.map((p) => `<li>${p}</li>`).join('')}</ul>` : ''}
         <div class="db__hover"></div>
@@ -301,9 +310,9 @@ function render() {
 
   // eventos
   root.querySelectorAll<HTMLElement>('[data-who]').forEach((b) =>
-    b.addEventListener('click', () => { ui.who = b.dataset.who as Who; ui.hover = null; render(); }));
+    b.addEventListener('click', () => { ui.who = b.dataset.who as Who; ui.hover = null; ui.presetNote = ''; render(); }));
   root.querySelectorAll<HTMLElement>('[data-faction]').forEach((b) =>
-    b.addEventListener('click', () => change((s) => { s.faction = cycle(FACTIONS, s.faction, Number(b.dataset.faction)); ui.hover = null; })));
+    b.addEventListener('click', () => change((s) => { s.faction = cycle(FACTIONS, s.faction, Number(b.dataset.faction)); ui.hover = null; ui.presetNote = ''; })));
   root.querySelectorAll<HTMLElement>('[data-leader]').forEach((b) =>
     b.addEventListener('click', () => change((s, c) => { s.leaders[c.faction] = cycle(leaders, c.leader, Number(b.dataset.leader)); })));
   root.querySelectorAll<HTMLElement>('[data-filter]').forEach((b) =>
@@ -311,10 +320,29 @@ function render() {
       ui.filter[b.dataset.list as 'collection' | 'deck'] = b.dataset.filter as Filter;
       render();
     }));
-  root.querySelector('[data-action="default"]')!.addEventListener('click', () =>
-    change((s, c) => { s.decks[c.faction] = defaultDeck(c.faction); }));
+  root.querySelector<HTMLSelectElement>('[data-action="preset"]')!.addEventListener('change', (ev) => {
+    const value = (ev.target as HTMLSelectElement).value;
+    if (!value) return;
+    change((s, c) => {
+      if (value === '__default') {
+        s.decks[c.faction] = defaultDeck(c.faction);
+        ui.presetNote = 'Todas as cartas da facção, com as neutras principais.';
+      } else if (value === '__random') {
+        const r = randomDeck(c.faction, leaders);
+        s.decks[c.faction] = r.cards;
+        s.leaders[c.faction] = r.leader;
+        ui.presetNote = 'Baralho sorteado — escolha de novo para outro.';
+      } else {
+        const p = PRESETS.find((x) => x.id === value)!;
+        s.decks[c.faction] = [...p.cards];
+        s.leaders[c.faction] = p.leader;
+        ui.presetNote = p.description;
+      }
+    });
+    playCard('shuffle', 0.45);
+  });
   root.querySelector('[data-action="clear"]')!.addEventListener('click', () =>
-    change((s, c) => { s.decks[c.faction] = []; }));
+    change((s, c) => { s.decks[c.faction] = []; ui.presetNote = ''; }));
   root.querySelector('[data-action="start"]')!.addEventListener('click', () => {
     if (!problems.length) onStart(currentSetup());
   });
