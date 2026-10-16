@@ -30,12 +30,18 @@ const ROW_ICON = { close: 'close_combat', ranged: 'ranged_combat', siege: 'siege
 export interface CardViewOptions {
   /** Força atual (com clima, trompa etc.). Se omitida, usa a base. */
   strength?: number;
+  /** Identidade da carta na partida — usada pelas animações para seguir a carta entre zonas. */
+  uid?: number;
+  /** Dono da carta (para saber para qual descarte ela voa). */
+  owner?: 'me' | 'op';
 }
 
 export function cardView(card: CardDef, opts: CardViewOptions = {}): HTMLElement {
   const el = document.createElement('div');
   el.className = `card card--${card.type}`;
   el.dataset.cardId = card.id;
+  if (opts.uid !== undefined) el.dataset.uid = String(opts.uid);
+  if (opts.owner) el.dataset.owner = opts.owner;
 
   const layers: string[] = [`<img class="card__art" src="${card.art}" alt="" draggable="false">`];
 

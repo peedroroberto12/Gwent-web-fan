@@ -367,3 +367,78 @@ button { font: inherit; }
 }
 
 .row__cards:has(.card) .row__label { display: none; }
+
+/* ---------- animações e arraste ---------- */
+
+.fx-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.fx-ghost,
+.drag-ghost {
+  position: fixed;
+  margin: 0;
+  pointer-events: none;
+}
+
+.fx-ghost { z-index: 100; }
+
+.drag-ghost {
+  z-index: 200;
+  rotate: 4deg;
+  box-shadow: 0 0 0 2px var(--gold-hi), 0 18px 30px rgba(0, 0, 0, 0.7), 0 0 24px rgba(240, 207, 122, 0.45);
+  transition: rotate 0.15s ease;
+}
+
+.hand .card { touch-action: none; }
+.hand .card.is-dragging { opacity: 0.25; transform: none; box-shadow: none; }
+
+.row__cards.is-hover,
+.row__horn.is-hover {
+  background: rgba(240, 207, 122, 0.22) !important;
+  outline-color: #fff7d6 !important;
+  animation: none !important;
+}
+
+.field.is-instant-target .rows { outline: 2px dashed rgba(240, 207, 122, 0.5); outline-offset: 2px; border-radius: 4px; }
+.field.is-hover .rows { outline-color: var(--gold-hi); background: rgba(240, 207, 122, 0.06); }
+
+/* clima chegando: a fileira "congela" / escurece suavemente */
+.row.weather-new::after { animation: weather-in 0.8s ease-out; }
+@keyframes weather-in {
+  0% { opacity: 0; backdrop-filter: blur(0); }
+  40% { opacity: 1; filter: brightness(1.8); }
+  100% { opacity: 1; }
+}
+
+/* carta queimando */
+.fx-burning::after {
+  content: '';
+  position: absolute;
+  inset: -20% -10% 0;
+  background: radial-gradient(ellipse at 50% 90%, rgba(255, 170, 40, 0.9), rgba(255, 60, 0, 0.5) 40%, transparent 70%);
+  mix-blend-mode: screen;
+  animation: flames 0.25s ease-in-out infinite alternate;
+}
+@keyframes flames {
+  from { transform: scaleY(1) translateY(0); opacity: 0.85; }
+  to { transform: scaleY(1.15) translateY(-4px); opacity: 1; }
+}
+
+.fx-spark {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffd36b;
+  box-shadow: 0 0 6px 2px rgba(255, 120, 20, 0.9);
+  pointer-events: none;
+  z-index: 101;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row.weather-new::after, .fx-burning::after, .is-target, .row.is-target .row__cards { animation: none; }
+}
