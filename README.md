@@ -53,7 +53,7 @@ Artes e dados vêm do repositório [API-Gwent](https://github.com/day-s-ea/API-G
 
 Depois: IA mais forte, Skellige, multiplayer.
 
-> Estado atual: motor de regras completo e testado (todas as habilidades de carta, 19 dos 20 líderes e as habilidades de facção) e partida jogável contra a IA.
+> Estado atual: motor de regras completo e testado (todas as habilidades de carta, os 20 líderes, as habilidades de facção, troca de 2 cartas na abertura e passe automático) e partida jogável contra a IA.
 
 ## Música de fundo
 

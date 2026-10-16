@@ -12,6 +12,7 @@ export type LeaderAbility =
   | { kind: 'steal_discard' } //                    pega uma carta do descarte inimigo
   | { kind: 'restore_discard' } //                  devolve uma carta do seu descarte à mão
   | { kind: 'move_agile' } //                       move os ágeis para a melhor fileira
+  | { kind: 'discard_draw' } //                     descarta 2 da mão e escolhe 1 do baralho
   | { kind: 'passive'; effect: 'random_medic' | 'cancel_leader' | 'double_spies' | 'extra_card' }
   | { kind: 'unimplemented' };
 
@@ -32,7 +33,7 @@ export const LEADERS: Record<string, LeaderAbility> = {
   'eredin-breacc-glas-the-treacherous': { kind: 'passive', effect: 'double_spies' },
   'eredin-bringer-of-death': { kind: 'restore_discard' },
   'eredin-commander-of-the-red-riders': { kind: 'horn', row: 'close' },
-  'eredin-destroyer-of-worlds': { kind: 'unimplemented' },
+  'eredin-destroyer-of-worlds': { kind: 'discard_draw' },
   'eredin-king-of-the-wild-hunt': { kind: 'pick_weather' },
   // Scoia'tael
   'francesca-findabair-daisy-of-the-valley': { kind: 'passive', effect: 'extra_card' },

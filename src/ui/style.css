@@ -13,14 +13,17 @@
   --font: 'Alegreya Sans', 'Segoe UI', sans-serif;
   --font-title: 'Alegreya SC', Georgia, serif;
 
-  --ink: #0f0a06;
-  --wood-1: #3d2b1c;
-  --wood-2: #2f2116;
-  --wood-3: #241910;
-  --lane: #1d140d;
-  --lane-hi: #2a1d13;
-  --bronze: #8a6a3e;
-  --bronze-hi: #b8935a;
+  --ink: #120801;
+  --wood-1: #7a4a1c; /* madeira clara (área da mão / coluna direita) */
+  --wood-2: #5c3512;
+  --wood-3: #3e220b;
+  --lane: #1f0c02; /*   pista da fileira (medido: #2e1403 / #401d04) */
+  --lane-hi: #331604;
+  --bronze: #9a6a34;
+  --bronze-hi: #c99555;
+  --metal-hi: #d9dee0; /* medalhões em metal acinzentado (medido: #7e8485) */
+  --metal: #8b9193;
+  --metal-lo: #474c4e;
   --gold: #d6b26a;
   --gold-hi: #f3d892;
   --fg: #eadfca;
@@ -56,10 +59,11 @@ button { font: inherit; }
   height: 100vh;
   /* tampo de madeira: tábuas verticais com veios suaves */
   background:
-    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(255, 210, 150, 0.06), transparent 70%),
-    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 140px),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.012) 0 3px, transparent 3px 11px),
-    linear-gradient(180deg, var(--wood-1), var(--wood-2) 50%, var(--wood-1));
+    radial-gradient(ellipse 60% 55% at 50% 50%, rgba(255, 190, 110, 0.10), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.18) 0 1px, transparent 1px 46px),
+    repeating-linear-gradient(0deg, rgba(255, 220, 160, 0.03) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.05) 0 40px, transparent 40px 97px),
+    linear-gradient(180deg, var(--wood-2), var(--wood-3) 50%, var(--wood-2));
 }
 
 .left, .right {
@@ -67,9 +71,17 @@ button { font: inherit; }
   display: grid;
   min-height: 0;
   padding: 1.4vh 1.2vw;
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.12));
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.12)),
+    repeating-linear-gradient(0deg, rgba(255, 220, 160, 0.03) 0 2px, transparent 2px 9px),
+    linear-gradient(var(--wood-3), #2f1907);
 }
-.right { background: linear-gradient(270deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.12)); }
+.right {
+  background:
+    linear-gradient(270deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)),
+    repeating-linear-gradient(0deg, rgba(255, 220, 160, 0.04) 0 2px, transparent 2px 9px),
+    linear-gradient(var(--wood-1), var(--wood-2));
+}
 
 .left {
   grid-template-rows: 15% 1fr 15% 1fr 15%;
@@ -159,7 +171,10 @@ button { font: inherit; }
   gap: 0.6vh;
   min-height: 0;
   padding: 1.2vh 0.6vw;
-  box-shadow: -1px 0 0 #120c07, 1px 0 0 #120c07, -2px 0 0 rgba(184, 147, 90, 0.25), 2px 0 0 rgba(184, 147, 90, 0.25);
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 220, 160, 0.05) 0 1px, transparent 1px 6px),
+    linear-gradient(#7a4a1c, #6a3f17 50%, #7a4a1c);
+  box-shadow: -1px 0 0 #120600, 1px 0 0 #120600, inset 0 0 40px rgba(0, 0, 0, 0.35);
 }
 
 .rows {
@@ -187,11 +202,16 @@ button { font: inherit; }
   width: min(2.5vw, 4.4vh);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 35%, #3a2a1c, #18100a 70%);
-  box-shadow: 0 0 0 2px #120c07, 0 0 0 3px var(--bronze-hi), 0 3px 6px rgba(0, 0, 0, 0.6);
+  background: radial-gradient(circle at 42% 32%, #ffffff, var(--metal-hi) 30%, #a7adb0 70%, #7b8184);
+  box-shadow:
+    0 0 0 1px #1a0b02,
+    0 0 0 3px #5b3a1a,
+    0 0 0 4px #1a0b02,
+    inset 0 -2px 3px rgba(0, 0, 0, 0.35),
+    0 3px 7px rgba(0, 0, 0, 0.7);
   font-weight: 700;
   font-size: min(1.15vw, 2vh);
-  color: var(--fg);
+  color: #1b1208;
 }
 
 /* espaço da trompa e pista das cartas: canaletas entalhadas */
@@ -203,12 +223,14 @@ button { font: inherit; }
   justify-content: center;
   min-height: 0;
   overflow: hidden;
-  border: 1px solid #120c07;
+  border: 1px solid #120600;
   box-shadow:
-    inset 0 0 0 1px rgba(184, 147, 90, 0.38),
-    inset 0 8px 16px rgba(0, 0, 0, 0.55);
+    inset 0 1px 0 rgba(255, 190, 120, 0.22),
+    inset 0 0 0 1px rgba(201, 149, 85, 0.28),
+    inset 0 10px 18px rgba(0, 0, 0, 0.45);
   background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.015) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(0deg, rgba(255, 200, 140, 0.035) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.12) 0 1px, transparent 1px 120px),
     linear-gradient(var(--lane-hi), var(--lane));
 }
 
@@ -264,14 +286,16 @@ button { font: inherit; }
   font-size: min(0.95vw, 15px);
   color: var(--gold-hi);
   text-align: center;
-  border-top: 1px solid #120c07;
-  border-bottom: 1px solid #120c07;
-  background: linear-gradient(rgba(184, 147, 90, 0.18), rgba(0, 0, 0, 0.35) 40%, rgba(184, 147, 90, 0.12));
-  box-shadow: inset 0 1px 0 rgba(184, 147, 90, 0.35), inset 0 -1px 0 rgba(184, 147, 90, 0.35);
+  border-top: 1px solid #1a0b02;
+  border-bottom: 1px solid #1a0b02;
+  background: linear-gradient(#8a6f52, #6d543a 45%, #5a432d);
+  box-shadow: inset 0 1px 0 rgba(255, 235, 200, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 .status span {
   font-family: var(--font-title);
-  color: var(--muted);
+  color: #2a1606;
+  text-shadow: 0 1px 0 rgba(255, 230, 190, 0.4);
   letter-spacing: 0.08em;
   white-space: nowrap;
 }
@@ -284,9 +308,11 @@ button { font: inherit; }
   gap: 0.2vw;
   min-height: 0;
   padding: 0 0.6vw;
-  border: 1px solid #120c07;
-  box-shadow: inset 0 0 0 1px rgba(184, 147, 90, 0.3), inset 0 10px 22px rgba(0, 0, 0, 0.7);
-  background: linear-gradient(#1a120b, #110b07);
+  border: 1px solid #120600;
+  box-shadow: inset 0 1px 0 rgba(255, 200, 140, 0.25), inset 0 0 0 1px rgba(201, 149, 85, 0.3), inset 0 12px 22px rgba(0, 0, 0, 0.4);
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 210, 150, 0.05) 0 1px, transparent 1px 7px),
+    linear-gradient(#6b4010, #4a2a0b);
 }
 .hand .card { cursor: pointer; touch-action: none; }
 .hand .card:hover { transform: translateY(-8%); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7); }
@@ -435,15 +461,21 @@ button { font: inherit; }
   width: min(4.2vw, 7.4vh);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 35%, #3b2b1d, #140d08 70%);
-  box-shadow: 0 0 0 2px #0d0805, 0 0 0 4px #6d5433, 0 4px 10px rgba(0, 0, 0, 0.7);
+  background: radial-gradient(circle at 42% 32%, #ffffff, var(--metal-hi) 30%, #a7adb0 70%, #7b8184);
+  box-shadow:
+    0 0 0 2px #1a0b02,
+    0 0 0 5px #5b3a1a,
+    0 0 0 6px #1a0b02,
+    inset 0 -3px 4px rgba(0, 0, 0, 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.75);
   font-weight: 700;
   font-size: min(1.6vw, 2.8vh);
-  color: var(--fg);
+  color: #1b1208;
 }
 /* quem está na frente ganha a coroa de louros dourada */
 .player__total.lead {
-  color: var(--gold-hi);
+  color: #2a1606;
+  background: radial-gradient(circle at 42% 32%, #fff6d8, #f0cf7a 35%, #c99a3e 75%, #8a6420);
   box-shadow:
     0 0 0 2px #0d0805,
     0 0 0 4px var(--gold),

@@ -2,8 +2,9 @@
 export const VERSION = '0.1.0';
 
 export * from './types';
+export type { Faction } from '../data/cards';
 export { createGame, defaultDeck, factionLeaders, type GameOptions } from './setup';
-export { applyMove, canUseLeader, legalMoves, musterGroup, pendingOptions } from './rules';
+export { actorOf, applyMove, canUseLeader, legalMoves, musterGroup, pendingOptions } from './rules';
 export { def, isHero, rowScore, rowStrengths, score, weatherRows } from './score';
 export { leaderAbility, LEADERS, type LeaderAbility } from './leaders';
 export {

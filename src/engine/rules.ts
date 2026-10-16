@@ -4,7 +4,7 @@
 // O estado recebido nunca é alterado: applyMove trabalha numa cópia.
 import { ROWS, type Row } from '../data/cards';
 import { leaderAbility } from './leaders';
-import { pick, shuffle } from './rng';
+import { pick, rand, shuffle } from './rng';
 import { def, has, isHero, isPlainUnit, leaderActive, passiveOn, rowScore, rowStrengths, score } from './score';
 import {
   other,
@@ -19,7 +19,7 @@ import {
 /** Grupo de convocação: "Arachas Behemoth" e "Arachas" se convocam; "Vampire: Bruxa" e "Vampire: Katakan" também. */
 export const musterGroup = (name: string) => name.split(':')[0]!.trim().split(/\s+/)[0]!.toLowerCase();
 
-const NOOP_MOVE_KEYS = ['type', 'uid', 'row', 'target'] as const;
+const NOOP_MOVE_KEYS = ['type', 'uid', 'row', 'target', 'player'] as const;
 const sameMove = (a: Move, b: Move) =>
   NOOP_MOVE_KEYS.every((k) => (a as Record<string, unknown>)[k] === (b as Record<string, unknown>)[k]);
 
@@ -39,7 +39,18 @@ export function pendingOptions(s: GameState): CardInst[] {
       return s.players[other(pd.player)].discard.filter((c) => !isHero(c));
     case 'deck_weather':
       return P.deck.filter((c) => def(c).type === 'weather');
+    case 'own_hand':
+      return P.hand;
+    case 'deck_any':
+      return P.deck;
   }
+}
+
+/** Quem precisa agir agora (escolha de início, troca de cartas, escolha pendente ou turno). */
+export function actorOf(s: GameState): PlayerId {
+  if (s.phase === 'first') return s.firstChooser!;
+  if (s.phase === 'redraw') return s.redrawDone[0] ? 1 : 0;
+  return s.pending ? s.pending.player : s.turn;
 }
 
 export function canUseLeader(s: GameState, p: PlayerId): boolean {
@@ -64,6 +75,8 @@ export function canUseLeader(s: GameState, p: PlayerId): boolean {
       return s.players[other(p)].discard.some((c) => !isHero(c));
     case 'restore_discard':
       return P.discard.some((c) => !isHero(c));
+    case 'discard_draw':
+      return P.hand.length >= 2 && P.deck.length > 0;
     default:
       return true;
   }
@@ -71,6 +84,14 @@ export function canUseLeader(s: GameState, p: PlayerId): boolean {
 
 export function legalMoves(s: GameState): Move[] {
   if (s.winner !== null) return [];
+  if (s.phase === 'first') return [{ type: 'first', player: 0 }, { type: 'first', player: 1 }];
+  if (s.phase === 'redraw') {
+    const p = actorOf(s);
+    const P = s.players[p];
+    const moves: Move[] = [{ type: 'keep' }];
+    if (s.redraws[p] > 0 && P.deck.length > 0) for (const c of P.hand) moves.push({ type: 'redraw', uid: c.uid });
+    return moves;
+  }
   if (s.pending) {
     const moves: Move[] = pendingOptions(s).map((c) => ({ type: 'choose', uid: c.uid }));
     if (s.pending.optional || moves.length === 0) moves.push({ type: 'choose', uid: null });
@@ -107,29 +128,87 @@ export function applyMove(state: GameState, move: Move): MoveResult {
   const s: GameState = structuredClone(state);
   const ev: GameEvent[] = [];
 
-  if (move.type === 'choose') {
-    resolvePending(s, move.uid, ev);
-  } else {
-    const p = s.turn;
-    if (move.type === 'pass') {
-      s.players[p].passed = true;
-      ev.push({ type: 'pass', player: p });
-      if (s.players[other(p)].passed) endRound(s, ev);
-      else s.turn = other(p);
+  switch (move.type) {
+    case 'first':
+      s.starter = move.player;
+      s.turn = move.player;
+      s.phase = 'redraw';
+      ev.push({ type: 'first', chooser: s.firstChooser!, starter: move.player });
       return { state: s, events: ev };
-    }
-    if (move.type === 'leader') useLeader(s, p, ev);
-    else playFromHand(s, p, move, ev);
+    case 'redraw':
+      redraw(s, actorOf(s), move.uid, ev);
+      finishRedrawIfDone(s, ev);
+      return { state: s, events: ev };
+    case 'keep':
+      s.redrawDone[actorOf(s)] = true;
+      finishRedrawIfDone(s, ev);
+      return { state: s, events: ev };
+    case 'choose':
+      resolvePending(s, move.uid, ev);
+      break;
+    case 'pass':
+      pass(s, s.turn, ev);
+      autoPass(s, ev);
+      return { state: s, events: ev };
+    case 'leader':
+      useLeader(s, s.turn, ev);
+      break;
+    case 'play':
+      playFromHand(s, s.turn, move, ev);
+      break;
   }
 
   if (s.pending) ev.push({ type: 'pending', pending: s.pending });
-  else if (s.winner === null) endTurn(s);
+  else if (s.winner === null) {
+    endTurn(s);
+    autoPass(s, ev);
+  }
   return { state: s, events: ev };
 }
 
 function endTurn(s: GameState) {
   const o = other(s.turn);
   if (!s.players[o].passed) s.turn = o;
+}
+
+function pass(s: GameState, p: PlayerId, ev: GameEvent[], auto = false) {
+  s.players[p].passed = true;
+  ev.push({ type: 'pass', player: p, ...(auto ? { auto } : {}) });
+  if (s.players[other(p)].passed) endRound(s, ev);
+  else s.turn = other(p);
+}
+
+/** Quem está na vez sem cartas na mão e sem líder para usar passa automaticamente. */
+function autoPass(s: GameState, ev: GameEvent[]) {
+  for (let guard = 0; guard < 6 && s.winner === null && s.phase === 'play' && !s.pending; guard++) {
+    const p = s.turn;
+    const P = s.players[p];
+    if (P.passed || P.hand.length > 0 || canUseLeader(s, p)) return;
+    pass(s, p, ev, true);
+  }
+}
+
+// ---------------------------------------------------------------- troca de cartas no início
+
+function redraw(s: GameState, p: PlayerId, uid: number, ev: GameEvent[]) {
+  const P = s.players[p];
+  const i = P.hand.findIndex((c) => c.uid === uid);
+  const [old] = P.hand.splice(i, 1);
+  const fresh = P.deck.shift()!;
+  P.hand.splice(i, 0, fresh);
+  // a carta trocada volta para uma posição aleatória do baralho
+  P.deck.splice(Math.floor(rand(s) * (P.deck.length + 1)), 0, old!);
+  s.redraws[p]--;
+  if (s.redraws[p] <= 0) s.redrawDone[p] = true;
+  ev.push({ type: 'redraw', player: p, out: old!.uid, in: fresh.uid });
+}
+
+function finishRedrawIfDone(s: GameState, ev: GameEvent[]) {
+  if (s.redrawDone[0] && s.redrawDone[1]) {
+    s.phase = 'play';
+    s.turn = s.starter;
+    autoPass(s, ev);
+  }
 }
 
 function takeFrom(list: CardInst[], uid: number): CardInst {
@@ -194,14 +273,17 @@ function placeUnit(s: GameState, p: PlayerId, c: CardInst, row: Row, from: 'hand
   if (d.abilities.includes('medic')) startMedic(s, p, ev);
 }
 
+/** Convocar: joga na hora as cartas do mesmo grupo que estiverem no baralho E na mão. */
 function muster(s: GameState, p: PlayerId, c: CardInst, ev: GameEvent[]) {
   const P = s.players[p];
   const group = musterGroup(def(c).name);
-  const found = P.deck.filter((x) => def(x).type !== 'leader' && musterGroup(def(x).name) === group);
-  for (const x of found) {
-    takeFrom(P.deck, x.uid);
-    P.rows[def(x).rows[0] ?? 'close'].push(x);
-    ev.push({ type: 'play', player: p, uid: x.uid, cardId: x.id, from: 'deck' });
+  const same = (x: CardInst) => def(x).type === 'unit' && musterGroup(def(x).name) === group;
+  for (const [list, from] of [[P.deck, 'deck'], [P.hand, 'hand']] as const) {
+    for (const x of list.filter(same)) {
+      takeFrom(list, x.uid);
+      P.rows[def(x).rows[0] ?? 'close'].push(x);
+      ev.push({ type: 'play', player: p, uid: x.uid, cardId: x.id, from });
+    }
   }
 }
 
@@ -245,6 +327,22 @@ function resolvePending(s: GameState, uid: number | null, ev: GameEvent[]) {
       playWeather(s, p, takeFrom(P.deck, uid), ev, 'deck');
       break;
     }
+    case 'own_hand': {
+      P.discard.push(takeFrom(P.hand, uid));
+      ev.push({ type: 'discard', player: p, uid });
+      break;
+    }
+    case 'deck_any': {
+      P.hand.push(takeFrom(P.deck, uid));
+      ev.push({ type: 'draw', player: p, uids: [uid] });
+      break;
+    }
+  }
+  // escolhas em etapas: repete a mesma fonte ou passa para a próxima
+  if (!s.pending) {
+    const left = (pd.count ?? 1) - 1;
+    if (left > 0) s.pending = { ...pd, count: left };
+    else if (pd.then) s.pending = { player: p, source: pd.then, optional: false };
   }
 }
 
@@ -262,6 +360,12 @@ function playWeather(s: GameState, p: PlayerId, c: CardInst, ev: GameEvent[], fr
   }
 }
 
+/** Carta que sai do campo vai para o descarte do lado onde estava (espião vai para o do oponente). */
+function toDiscardOf(s: GameState, side: PlayerId, c: CardInst) {
+  c.owner = side;
+  s.players[side].discard.push(c);
+}
+
 function clearWeather(s: GameState) {
   for (const w of s.weather) s.players[w.owner].discard.push(w);
   s.weather = [];
@@ -273,7 +377,7 @@ function destroy(s: GameState, victims: { p: PlayerId; row: Row; uid: number }[]
   if (!victims.length) return;
   for (const v of victims) {
     const c = takeFrom(s.players[v.p].rows[v.row], v.uid);
-    s.players[c.owner].discard.push(c);
+    toDiscardOf(s, v.p, c);
   }
   ev.push({ type: 'destroy', uids: victims.map((v) => v.uid) });
 }
@@ -340,6 +444,9 @@ function useLeader(s: GameState, p: PlayerId, ev: GameEvent[]) {
     case 'restore_discard':
       s.pending = { player: p, source: 'own_discard', optional: false };
       break;
+    case 'discard_draw':
+      s.pending = { player: p, source: 'own_hand', optional: false, count: 2, then: 'deck_any' };
+      break;
     case 'move_agile': {
       // move cada unidade ágil para a fileira (corpo a corpo / distância) onde ela vale mais
       for (const from of ['close', 'ranged'] as Row[]) {
@@ -392,7 +499,7 @@ function endRound(s: GameState, ev: GameEvent[]) {
       if (kept) ev.push({ type: 'faction', player: p, faction: 'monsters' });
     }
     for (const row of ROWS) {
-      for (const c of P.rows[row]) if (c !== kept?.c) s.players[c.owner].discard.push(c);
+      for (const c of P.rows[row]) if (c !== kept?.c) toDiscardOf(s, p, c);
       const h = P.horns[row];
       if (h && h !== 'leader') s.players[h.owner].discard.push(h);
       P.rows[row] = [];

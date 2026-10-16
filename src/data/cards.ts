@@ -118,7 +118,7 @@ export const LEADER_TEXT: Record<string, string> = {
   'eredin-breacc-glas-the-treacherous': 'Passivo: dobra a força de todos os espiões.',
   'eredin-bringer-of-death': 'Devolve uma carta do seu descarte para a mão.',
   'eredin-commander-of-the-red-riders': 'Dobra a força das suas unidades corpo a corpo (se a fileira ainda não tiver trompa).',
-  'eredin-destroyer-of-worlds': 'Descarta 2 cartas e escolhe 1 do baralho. (Ainda não implementado.)',
+  'eredin-destroyer-of-worlds': 'Descarta 2 cartas da mão e escolhe 1 carta qualquer do baralho.',
   'eredin-king-of-the-wild-hunt': 'Escolhe qualquer clima do baralho e joga na hora.',
   'francesca-findabair-daisy-of-the-valley': 'Passivo: começa a partida com uma carta a mais.',
   'francesca-findabair-hope-of-the-aen-seidhe': 'Move as unidades ágeis para a fileira onde valem mais.',

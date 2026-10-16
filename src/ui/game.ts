@@ -15,6 +15,7 @@ import {
 } from '../data/cards';
 import {
   applyMove,
+  actorOf,
   canUseLeader,
   createGame,
   legalMoves,
@@ -88,7 +89,13 @@ function describe(events: GameEvent[]): string {
         parts.push(`${e.uids.length} carta(s) queimada(s)!`);
         break;
       case 'pass':
-        parts.push(`${who(e.player)} passou.`);
+        parts.push(e.auto ? `${who(e.player)} ficou sem cartas e passou.` : `${who(e.player)} passou.`);
+        break;
+      case 'first':
+        parts.push(`${e.starter === ME ? 'Você começa' : 'O oponente começa'} (escolha da Scoia'tael).`);
+        break;
+      case 'discard':
+        parts.push(`${who(e.player)} descartou ${name(g.players[e.player].discard.find((c) => c.uid === e.uid)?.id ?? '')}.`);
         break;
       case 'faction':
         if (e.faction === 'northern') parts.push('Reinos do Norte: carta extra pela vitória.');
@@ -110,8 +117,8 @@ function describe(events: GameEvent[]): string {
 
 // ---------------------------------------------------------------- fluxo
 
-const actor = () => (g.pending ? g.pending.player : g.turn);
-const myTurn = () => !ui.busy && g.winner === null && actor() === ME && !g.players[ME].passed;
+const actor = () => actorOf(g);
+const myTurn = () => !ui.busy && g.winner === null && g.phase === 'play' && actor() === ME && !g.players[ME].passed;
 
 async function dispatch(move: Move, overrides?: Map<string, DOMRect>) {
   const mySession = session;
@@ -508,8 +515,48 @@ function renderOverlays() {
     return;
   }
 
+  // abertura: Scoia'tael escolhe quem começa
+  if (g.phase === 'first' && g.firstChooser === ME) {
+    const el = modal('Scoia\'tael: quem começa a partida?', 'Jogar em segundo costuma ser vantagem: você vê a jogada do oponente antes.');
+    el.querySelector('.modal__cards')!.remove();
+    const row = document.createElement('div');
+    row.className = 'modal__buttons';
+    for (const [label, p] of [['Eu começo', ME], ['Oponente começa', AI]] as const) {
+      const b = document.createElement('button');
+      b.className = 'btn';
+      b.textContent = label;
+      b.addEventListener('click', () => void dispatch({ type: 'first', player: p }));
+      row.append(b);
+    }
+    el.querySelector('.modal__box')!.append(row);
+    return;
+  }
+
+  // abertura: trocar até 2 cartas da mão
+  if (g.phase === 'redraw' && actor() === ME) {
+    const left = g.redraws[ME];
+    const el = modal('Escolha até 2 cartas para trocar', `Trocas restantes: ${left}. A carta trocada volta para o baralho.`);
+    el.classList.add('modal--redraw');
+    const grid = el.querySelector('.modal__cards')!;
+    for (const c of g.players[ME].hand) {
+      const cv = hoverable(cardView(getCard(c.id)), getCard(c.id));
+      cv.classList.add('is-pickable');
+      cv.addEventListener('click', () => void dispatch({ type: 'redraw', uid: c.uid }));
+      grid.append(cv);
+    }
+    const done = document.createElement('button');
+    done.className = 'btn';
+    done.textContent = 'Pronto';
+    done.addEventListener('click', () => void dispatch({ type: 'keep' }));
+    el.querySelector('.modal__box')!.append(done);
+    return;
+  }
+
   if (g.pending && g.pending.player === ME) {
+    const left = g.pending.count ?? 1;
     const titles = {
+      own_hand: `Escolha uma carta da mão para descartar${left > 1 ? ` (${left} restantes)` : ''}`,
+      deck_any: 'Escolha uma carta do seu baralho',
       medic: 'Médico: escolha uma unidade para reviver',
       own_discard: 'Escolha uma carta do seu descarte',
       opp_discard: 'Escolha uma carta do descarte do oponente',

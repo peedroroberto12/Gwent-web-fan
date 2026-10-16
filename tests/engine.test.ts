@@ -30,6 +30,7 @@ function game(o: Setup = {}): GameState {
     decks: [[], []],
     handSize: 0,
     seed: 42,
+    skipOpening: true,
   });
   s.turn = 0;
   s.starter = 0;
@@ -143,6 +144,18 @@ describe('habilidades', () => {
     expect(ids(state.players[0].deck)).toEqual(['ghoul-1']);
   });
 
+  it('convocar também puxa as cartas do grupo que estão na mão (as 3 Moiras)', () => {
+    const s = game({
+      factions: ['monsters', 'nilfgaard'],
+      hand0: ['crone-brewess', 'crone-weavess', 'ghoul-1'],
+      deck0: ['crone-whispess', 'nekker-1'],
+    });
+    const { state } = play(s, 'crone-brewess', { row: 'close' });
+    expect(ids(state.players[0].rows.close).sort()).toEqual(['crone-brewess', 'crone-weavess', 'crone-whispess']);
+    expect(ids(state.players[0].hand)).toEqual(['ghoul-1']);
+    expect(ids(state.players[0].deck)).toEqual(['nekker-1']);
+  });
+
   it('isca troca de lugar com uma unidade, que volta para a mão', () => {
     const s = game({ hand0: ['decoy'] });
     put(s, 0, 'close', 'ves');
@@ -213,6 +226,26 @@ describe('habilidades', () => {
 // ---------- líderes ----------
 
 describe('líderes', () => {
+  it('Destroyer of Worlds: descarta 2 da mão e escolhe 1 do baralho', () => {
+    const s = game({
+      factions: ['monsters', 'nilfgaard'],
+      leaders: ['eredin-destroyer-of-worlds', 'emhyr-var-emreis-emperor-of-nilfgaard'],
+      hand0: ['ghoul-1', 'nekker-1', 'arachas-1'],
+      deck0: ['draug', 'ghoul-2'],
+    });
+    let r = applyMove(s, { type: 'leader' });
+    expect(r.state.pending).toMatchObject({ source: 'own_hand', count: 2 });
+    r = applyMove(r.state, { type: 'choose', uid: r.state.players[0].hand[0]!.uid });
+    expect(r.state.pending).toMatchObject({ source: 'own_hand', count: 1 });
+    r = applyMove(r.state, { type: 'choose', uid: r.state.players[0].hand[0]!.uid });
+    expect(r.state.pending?.source).toBe('deck_any');
+    const draug = r.state.players[0].deck.find((c) => c.id === 'draug')!;
+    r = applyMove(r.state, { type: 'choose', uid: draug.uid });
+    expect(ids(r.state.players[0].hand).sort()).toEqual(['arachas-1', 'draug']);
+    expect(ids(r.state.players[0].discard).sort()).toEqual(['ghoul-1', 'nekker-1']);
+    expect(r.state.turn).toBe(1);
+  });
+
   it('Siegemaster põe trompa no cerco', () => {
     const s = game({ leaders: ['foltest-the-siegemaster', 'emhyr-var-emreis-emperor-of-nilfgaard'] });
     put(s, 0, 'siege', 'ballista-1');
@@ -307,6 +340,24 @@ describe('rodadas', () => {
     expect([state.players[0].gems, state.players[1].gems]).toEqual([1, 1]);
   });
 
+  it('espião vai para o descarte do lado onde estava no fim da rodada', () => {
+    const s = game();
+    s.players[1].rows.close.push({ uid: 990, id: 'prince-stennis', owner: 0 });
+    const { state } = bothPass(s);
+    expect(state.players[1].discard.find((c) => c.uid === 990)?.owner).toBe(1);
+    expect(state.players[0].discard.some((c) => c.uid === 990)).toBe(false);
+  });
+
+  it('quem fica sem cartas e sem líder passa automaticamente', () => {
+    const s = game({ hand0: ['ves'], hand1: ['vreemde', 'vreemde'] });
+    s.players[0].leaderUsed = true;
+    let r = play(s, 'ves', { row: 'close' });
+    r = applyMove(r.state, { type: 'play', uid: r.state.players[1].hand[0]!.uid, row: 'close' });
+    expect(r.state.players[0].passed).toBe(true);
+    expect(r.events).toContainEqual({ type: 'pass', player: 0, auto: true });
+    expect(r.state.turn).toBe(1);
+  });
+
   it('Reinos do Norte compram 1 carta ao vencer a rodada', () => {
     const s = game({ deck0: ['ves'] });
     put(s, 0, 'close', 'ves');
@@ -332,10 +383,38 @@ describe('rodadas', () => {
   });
 });
 
+describe('abertura', () => {
+  it('cada jogador troca até 2 cartas; a trocada volta ao baralho', () => {
+    let s = createGame({ factions: ['northern', 'nilfgaard'], seed: 3 });
+    expect(s.phase).toBe('redraw');
+    const before = s.players[0].hand[0]!.uid;
+    s = applyMove(s, { type: 'redraw', uid: before }).state;
+    expect(s.players[0].hand).toHaveLength(10);
+    expect(s.players[0].deck.some((c) => c.uid === before)).toBe(true);
+    s = applyMove(s, { type: 'redraw', uid: s.players[0].hand[1]!.uid }).state;
+    expect(s.redrawDone[0]).toBe(true); // usou as 2 trocas
+    expect(legalMoves(s).filter((m) => m.type === 'redraw').length).toBe(10); // vez do jogador 1
+    s = applyMove(s, { type: 'keep' }).state;
+    expect(s.phase).toBe('play');
+    expect(s.turn).toBe(s.starter);
+  });
+
+  it("Scoia'tael escolhe quem começa", () => {
+    let s = createGame({ factions: ['scoiatael', 'nilfgaard'], seed: 5 });
+    expect(s.phase).toBe('first');
+    expect(legalMoves(s)).toEqual([{ type: 'first', player: 0 }, { type: 'first', player: 1 }]);
+    s = applyMove(s, { type: 'first', player: 1 }).state;
+    expect(s.phase).toBe('redraw');
+    expect(s.starter).toBe(1);
+  });
+});
+
 describe('partida completa', () => {
   it('jogadas aleatórias sempre terminam sem erro', () => {
+    const fs: Faction[] = ['northern', 'nilfgaard', 'scoiatael', 'monsters'];
     for (let seed = 1; seed <= 40; seed++) {
-      let s = createGame({ factions: ['northern', 'nilfgaard'], seed });
+      const pair: [Faction, Faction] = [fs[seed % 4]!, fs[(seed + 1) % 4]!];
+      let s = createGame({ factions: pair, seed });
       let guard = 0;
       while (s.winner === null && guard++ < 500) {
         const moves = legalMoves(s);
@@ -348,7 +427,7 @@ describe('partida completa', () => {
         return [...P.deck, ...P.hand, ...P.discard, ...Object.values(P.rows).flat()];
       });
       expect(new Set(all.map((c) => c.uid)).size).toBe(all.length);
-      expect(all.length + s.weather.length).toBe(defaultDeck('northern').length + defaultDeck('nilfgaard').length);
+      expect(all.length + s.weather.length).toBe(defaultDeck(pair[0]).length + defaultDeck(pair[1]).length);
       expect(score(s, 0)).toBeGreaterThanOrEqual(0);
     }
   });

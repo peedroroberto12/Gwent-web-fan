@@ -33,15 +33,30 @@ export type PickSource =
   | 'medic' //        unidade do próprio descarte -> jogada no campo
   | 'own_discard' //  carta do próprio descarte -> mão
   | 'opp_discard' //  carta do descarte do oponente -> mão
-  | 'deck_weather'; // clima do próprio baralho -> jogado
+  | 'deck_weather' // clima do próprio baralho -> jogado
+  | 'own_hand' //     carta da própria mão -> descarte
+  | 'deck_any'; //    qualquer carta do próprio baralho -> mão
 
 export interface Pending {
   player: PlayerId;
   source: PickSource;
   optional: boolean;
+  /** Quantas escolhas desta fonte ainda faltam (padrão 1). */
+  count?: number;
+  /** Escolha seguinte, depois desta (ex.: descartar 2 e então pegar 1 do baralho). */
+  then?: PickSource;
 }
 
+/** 'first': Scoia'tael escolhe quem começa · 'redraw': troca de até 2 cartas · 'play': partida. */
+export type Phase = 'first' | 'redraw' | 'play';
+
 export interface GameState {
+  phase: Phase;
+  /** Quem escolhe quem começa (só na fase 'first'). */
+  firstChooser: PlayerId | null;
+  /** Trocas de carta restantes de cada jogador na fase 'redraw'. */
+  redraws: [number, number];
+  redrawDone: [boolean, boolean];
   players: [PlayerState, PlayerState];
   weather: CardInst[];
   turn: PlayerId;
@@ -59,7 +74,10 @@ export type Move =
   | { type: 'play'; uid: number; row?: Row; target?: number }
   | { type: 'pass' }
   | { type: 'leader' }
-  | { type: 'choose'; uid: number | null };
+  | { type: 'choose'; uid: number | null }
+  | { type: 'first'; player: PlayerId } //  quem começa (escolha da Scoia'tael)
+  | { type: 'redraw'; uid: number } //      troca uma carta da mão no início
+  | { type: 'keep' }; //                    encerra as trocas
 
 /** O que aconteceu numa jogada — a interface usa isso para animar e narrar. */
 export type GameEvent =
@@ -69,7 +87,10 @@ export type GameEvent =
   | { type: 'draw'; player: PlayerId; uids: number[] }
   | { type: 'return'; player: PlayerId; uid: number }
   | { type: 'reveal'; player: PlayerId; cardIds: string[] }
-  | { type: 'pass'; player: PlayerId }
+  | { type: 'pass'; player: PlayerId; auto?: boolean }
+  | { type: 'first'; chooser: PlayerId; starter: PlayerId }
+  | { type: 'redraw'; player: PlayerId; out: number; in: number }
+  | { type: 'discard'; player: PlayerId; uid: number }
   | { type: 'pending'; pending: Pending }
   | { type: 'faction'; player: PlayerId; faction: Faction }
   | { type: 'round'; winner: PlayerId | 'draw'; scores: [number, number]; round: number }

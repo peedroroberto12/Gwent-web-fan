@@ -47,10 +47,16 @@ export interface GameOptions {
   decks?: [string[]?, string[]?];
   seed?: number;
   handSize?: number;
+  /** Pular a escolha de quem começa e a troca de cartas (usado nos testes). */
+  skipOpening?: boolean;
 }
 
 export function createGame(opts: GameOptions): GameState {
   const s: GameState = {
+    phase: 'redraw',
+    firstChooser: null,
+    redraws: [2, 2],
+    redrawDone: [false, false],
     players: [emptyPlayer(opts.factions[0]), emptyPlayer(opts.factions[1])],
     weather: [],
     turn: 0,
@@ -74,10 +80,15 @@ export function createGame(opts: GameOptions): GameState {
     P.hand = P.deck.splice(0, (opts.handSize ?? 10) + extra);
   }
 
-  // Scoia'tael começa; senão, cara ou coroa
-  const scoia = ([0, 1] as PlayerId[]).filter((p) => s.players[p].faction === 'scoiatael');
-  s.starter = scoia.length === 1 ? scoia[0]! : rand(s) < 0.5 ? 0 : 1;
+  // cara ou coroa; se só um lado é Scoia'tael, ele escolhe quem começa
+  s.starter = rand(s) < 0.5 ? 0 : 1;
   s.turn = s.starter;
+  const scoia = ([0, 1] as PlayerId[]).filter((p) => s.players[p].faction === 'scoiatael');
+  if (scoia.length === 1) {
+    s.phase = 'first';
+    s.firstChooser = scoia[0]!;
+  }
+  if (opts.skipOpening) s.phase = 'play';
   return s;
 }
 

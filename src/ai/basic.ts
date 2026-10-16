@@ -60,7 +60,32 @@ function choosePending(s: GameState, me: PlayerId): Move {
   return { type: 'choose', uid: best.uid };
 }
 
+/** Quanto vale manter a carta na mão na troca inicial (baixo = trocar). */
+function keepValue(s: GameState, me: PlayerId, uid: number): number {
+  const hand = s.players[me].hand;
+  const c = hand.find((x) => x.uid === uid)!;
+  const d = def(c);
+  if (d.type === 'hero') return 10;
+  const best = ['spy', 'medic', 'muster', 'scorch', 'scorch_close', 'horn', 'decoy', 'tight_bond', 'morale'];
+  if (d.abilities.some((a) => best.includes(a))) return 8;
+  if (d.type === 'weather') {
+    // um clima de cada tipo é útil; repetidos não
+    const same = hand.filter((x) => x.id === c.id);
+    return same[0]!.uid === uid ? 6 : 1;
+  }
+  return d.strength ?? 0;
+}
+
+function chooseRedraw(s: GameState, me: PlayerId): Move {
+  if (s.redraws[me] <= 0 || !s.players[me].deck.length) return { type: 'keep' };
+  const ranked = s.players[me].hand.map((c) => ({ uid: c.uid, v: keepValue(s, me, c.uid) })).sort((a, b) => a.v - b.v);
+  const worst = ranked[0];
+  return worst && worst.v <= 3 ? { type: 'redraw', uid: worst.uid } : { type: 'keep' };
+}
+
 export function chooseMove(s: GameState, me: PlayerId): Move {
+  if (s.phase === 'first') return { type: 'first', player: other(me) }; // jogar em segundo é vantagem
+  if (s.phase === 'redraw') return chooseRedraw(s, me);
   if (s.pending && s.pending.player === me) return choosePending(s, me);
 
   const moves = legalMoves(s);
