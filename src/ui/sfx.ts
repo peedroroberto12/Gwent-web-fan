@@ -36,14 +36,24 @@ export function initSfx() {
     cache.set(f, a);
   }
   // o áudio sintetizado só pode começar depois de uma interação
-  window.addEventListener('pointerdown', () => {
+  // (encostar o dedo não conta no celular, então tenta em cada interação até liberar)
+  const gestures = ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'];
+  const unlock = () => {
     try {
       ctx ??= new AudioContext();
-      void ctx.resume();
+      if (ctx.state === 'running') {
+        for (const g of gestures) window.removeEventListener(g, unlock);
+        return;
+      }
+      void ctx.resume().then(() => {
+        if (ctx?.state === 'running') for (const g of gestures) window.removeEventListener(g, unlock);
+      }).catch(() => {});
     } catch {
       /* navegador sem Web Audio: só os sons de arquivo funcionam */
+      for (const g of gestures) window.removeEventListener(g, unlock);
     }
-  }, { once: true });
+  };
+  for (const g of gestures) window.addEventListener(g, unlock, { passive: true });
 }
 
 export function toggleSfx() {
