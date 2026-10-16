@@ -277,7 +277,8 @@ function placeUnit(s: GameState, p: PlayerId, c: CardInst, row: Row, from: 'hand
 function muster(s: GameState, p: PlayerId, c: CardInst, ev: GameEvent[]) {
   const P = s.players[p];
   const group = musterGroup(def(c).name);
-  const same = (x: CardInst) => def(x).type === 'unit' && musterGroup(def(x).name) === group;
+  // só cartas que também têm Convocar entram (ex.: Havekar Healer não vem junto com o Smuggler)
+  const same = (x: CardInst) => has(x, 'muster') && musterGroup(def(x).name) === group;
   for (const [list, from] of [[P.deck, 'deck'], [P.hand, 'hand']] as const) {
     for (const x of list.filter(same)) {
       takeFrom(list, x.uid);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Faction, Row } from '../src/data/cards';
+import { getCard, type Faction, type Row } from '../src/data/cards';
 import {
   applyMove,
   createGame,
@@ -54,6 +54,7 @@ function play(s: GameState, id: string, extra: { row?: Row; target?: number } = 
 }
 
 const ids = (list: { id: string }[]) => list.map((c) => c.id);
+const getCardRows = (id: string): Row => getCard(id).rows[0]!;
 
 // ---------- pontuação ----------
 
@@ -154,6 +155,43 @@ describe('habilidades', () => {
     expect(ids(state.players[0].rows.close).sort()).toEqual(['crone-brewess', 'crone-weavess', 'crone-whispess']);
     expect(ids(state.players[0].hand)).toEqual(['ghoul-1']);
     expect(ids(state.players[0].deck)).toEqual(['nekker-1']);
+  });
+
+  describe('grupos de convocar (conferidos na wiki)', () => {
+    const musterFrom = (faction: Faction, played: string, others: string[]) => {
+      const s = game({ factions: [faction, 'nilfgaard'], hand0: [played], deck0: others });
+      const row = (id: string) => getCardRows(id);
+      const { state } = play(s, played, { row: row(played) });
+      return { onBoard: Object.values(state.players[0].rows).flat().map((c) => c.id).sort(), deck: ids(state.players[0].deck).sort() };
+    };
+
+    it('um vampiro chama todos os tipos de vampiro', () => {
+      const r = musterFrom('monsters', 'vampire-ekimmara', ['vampire-bruxa', 'vampire-fleder', 'vampire-garkain', 'vampire-katakan', 'ghoul-1']);
+      expect(r.onBoard).toEqual(['vampire-bruxa', 'vampire-ekimmara', 'vampire-fleder', 'vampire-garkain', 'vampire-katakan']);
+      expect(r.deck).toEqual(['ghoul-1']);
+    });
+
+    it('Arachas chama o Behemoth, e o Behemoth chama os Arachas', () => {
+      expect(musterFrom('monsters', 'arachas-1', ['arachas-behemoth']).onBoard).toEqual(['arachas-1', 'arachas-behemoth']);
+      expect(musterFrom('monsters', 'arachas-behemoth', ['arachas-2', 'arachas-3']).onBoard).toEqual(['arachas-2', 'arachas-3', 'arachas-behemoth']);
+    });
+
+    it('Havekar Smuggler não traz os Havekar Healers (médicos, sem convocar)', () => {
+      const r = musterFrom('scoiatael', 'havekar-smuggler-1', ['havekar-smuggler-2', 'havekar-healer-1']);
+      expect(r.onBoard).toEqual(['havekar-smuggler-1', 'havekar-smuggler-2']);
+      expect(r.deck).toEqual(['havekar-healer-1']);
+    });
+
+    it('escaramuçadores anões e élficos são grupos separados', () => {
+      const r = musterFrom('scoiatael', 'dwarven-skirmisher-1', ['dwarven-skirmisher-2', 'elven-skirmisher-1']);
+      expect(r.onBoard).toEqual(['dwarven-skirmisher-1', 'dwarven-skirmisher-2']);
+    });
+
+    it('Mahakaman Defender não tem convocar', () => {
+      const r = musterFrom('scoiatael', 'mahakaman-defender-1', ['mahakaman-defender-2']);
+      expect(r.onBoard).toEqual(['mahakaman-defender-1']);
+      expect(r.deck).toEqual(['mahakaman-defender-2']);
+    });
   });
 
   it('isca troca de lugar com uma unidade, que volta para a mão', () => {

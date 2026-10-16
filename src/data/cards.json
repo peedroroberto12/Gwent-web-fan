@@ -1550,9 +1550,7 @@
       "close"
     ],
     "strength": 5,
-    "abilities": [
-      "muster"
-    ],
+    "abilities": [],
     "copies": 1,
     "flavor": "I'm telling ye, we're born fer battle – we slash straight at their knees!",
     "art": "cards/art/mahakaman-defender-1.webp"
@@ -1566,9 +1564,7 @@
       "close"
     ],
     "strength": 5,
-    "abilities": [
-      "muster"
-    ],
+    "abilities": [],
     "copies": 1,
     "flavor": "I'm telling ye, we're born fer battle – we slash straight at their knees!",
     "art": "cards/art/mahakaman-defender-2.webp"
@@ -1582,9 +1578,7 @@
       "close"
     ],
     "strength": 5,
-    "abilities": [
-      "muster"
-    ],
+    "abilities": [],
     "copies": 1,
     "flavor": "I'm telling ye, we're born fer battle – we slash straight at their knees!",
     "art": "cards/art/mahakaman-defender-3.webp"
@@ -1598,9 +1592,7 @@
       "close"
     ],
     "strength": 5,
-    "abilities": [
-      "muster"
-    ],
+    "abilities": [],
     "copies": 1,
     "flavor": "I'm telling ye, we're born fer battle – we slash straight at their knees!",
     "art": "cards/art/mahakaman-defender-4.webp"
@@ -1614,9 +1606,7 @@
       "close"
     ],
     "strength": 5,
-    "abilities": [
-      "muster"
-    ],
+    "abilities": [],
     "copies": 1,
     "flavor": "I'm telling ye, we're born fer battle – we slash straight at their knees!",
     "art": "cards/art/mahakaman-defender-5.webp"

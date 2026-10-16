@@ -99,10 +99,10 @@ export const PRESETS: PresetDeck[] = [
   },
   {
     id: 'st-mahakam',
-    name: 'Convocação de Mahakam',
+    name: 'Clãs de Mahakam',
     faction: 'scoiatael',
     leader: 'francesca-findabair-daisy-of-the-valley',
-    description: 'Uma carta chama o clã inteiro: defensores, escaramuçadores e contrabandistas enchem a mesa de uma vez.',
+    description: 'Escaramuçadores e contrabandistas se convocam em grupo, e os defensores de Mahakam seguram o corpo a corpo.',
     cards: [
       'iorveth', 'eithne', 'isengrim-faoiltiarna', 'saesenthessis',
       'mahakaman-defender-1', 'mahakaman-defender-2', 'mahakaman-defender-3', 'mahakaman-defender-4', 'mahakaman-defender-5',

@@ -69,6 +69,12 @@ const BY_NAME = {
   Scorch: ['scorch'],
 };
 
+// Correções em relação ao Witcher 3 (conferidas na wiki): o API-Gwent marca
+// Mahakaman Defender com Convocar, mas no jogo ele é uma unidade simples.
+const ABILITY_FIX = {
+  'Mahakaman Defender': [],
+};
+
 const asList = (v) => (Array.isArray(v) ? v : v === '' || v == null ? [] : [v]);
 
 const slug = (s) =>
@@ -93,6 +99,8 @@ function normalize(raw) {
       leaderText = String(a.ability).trim();
     } else if (BY_NAME[data.name]) {
       abilities = BY_NAME[data.name];
+    } else if (ABILITY_FIX[data.name]) {
+      abilities = ABILITY_FIX[data.name];
     } else {
       abilities = asList(a.ability).map((x) => {
         const id = ABILITIES[x];
