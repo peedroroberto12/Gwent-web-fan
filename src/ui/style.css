@@ -1161,3 +1161,114 @@ body {
   .db__preset-note, .db__problems { font-size: 10px; }
   .db__hover { display: none; }
 }
+
+/* ================================================================ online */
+
+.db__online { width: 100%; margin-top: -4px; }
+
+.modal__note { margin: 0; max-width: 420px; text-align: center; color: var(--fg); line-height: 1.4; }
+
+.online-panel { width: min(420px, 100%); }
+.online-panel > .btn:not(.btn--small) { width: 100%; padding: 1.4vh 10px; font-size: 17px; }
+.online-panel__or { display: flex; align-items: center; gap: 10px; width: 100%; color: var(--muted); font-size: 13px; }
+.online-panel__or::before, .online-panel__or::after { content: ''; flex: 1; height: 1px; background: rgba(184, 147, 90, 0.35); }
+.online-panel__join { display: flex; gap: 8px; width: 100%; }
+.online-panel__join .btn { min-width: 0; }
+.online-panel__code, .lobby__link input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid #0d0805;
+  border-radius: 2px;
+  font: inherit;
+  color: var(--gold-hi);
+  background: #120c07;
+  box-shadow: inset 0 0 0 1px rgba(184, 147, 90, 0.45);
+}
+.online-panel__code { font-family: var(--font-title); font-size: 20px; letter-spacing: 0.25em; text-transform: uppercase; text-align: center; }
+.online-panel__error { margin: 0; color: #ff8a7a; font-size: 14px; }
+
+.lobby {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 16px;
+  background:
+    radial-gradient(ellipse at center, rgba(255, 210, 150, 0.07), transparent 60%),
+    linear-gradient(var(--wood-2), var(--ink));
+}
+.lobby__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: min(520px, 100%);
+  padding: 24px 28px;
+  text-align: center;
+  background: linear-gradient(#2d2016, #160f0a);
+  border: 1px solid #0d0805;
+  box-shadow: inset 0 0 0 1px var(--bronze), inset 0 0 0 4px #160f0a, inset 0 0 0 5px rgba(184, 147, 90, 0.4), 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+.lobby h1 { margin: 0; font-family: var(--font-title); font-weight: 700; font-size: 34px; letter-spacing: 0.06em; color: var(--gold-hi); }
+.lobby__status { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 17px; color: var(--fg); }
+.lobby__status.is-ok { color: #a8e08a; }
+.lobby__status.is-error { color: #ff8a7a; }
+.lobby__spinner {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(243, 216, 146, 0.25);
+  border-top-color: var(--gold-hi);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.lobby__label { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+.lobby__link { display: flex; gap: 8px; width: 100%; }
+.lobby__link input { font-size: 13px; }
+.lobby__link .btn { min-width: 84px; font-size: 14px; }
+.lobby__share { width: 100%; padding: 1.4vh 10px; font-size: 17px; }
+.lobby__code { margin: 0; color: var(--muted); }
+.lobby__code b { font-family: var(--font-title); font-size: 22px; letter-spacing: 0.18em; color: var(--gold-hi); }
+.lobby__hint { display: none; margin: 0; font-size: 14px; line-height: 1.4; color: #f0cf7a; }
+.lobby__hint.is-visible { display: block; }
+.lobby__actions { display: flex; gap: 10px; align-items: center; }
+.lobby__actions .btn--small { font-size: 13px; padding: 6px 10px; }
+
+.status__wait { color: #f3e3b8; font-style: italic; animation: wait-pulse 1.6s ease-in-out infinite; }
+@keyframes wait-pulse { 50% { opacity: 0.45; } }
+
+.netbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 140;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 10px;
+  max-width: calc(100% - 32px);
+  padding: 8px 16px;
+  transform: translateX(-50%);
+  font-size: 15px;
+  color: var(--fg);
+  background: rgba(40, 10, 6, 0.94);
+  border: 1px solid #0d0805;
+  border-top: 0;
+  box-shadow: inset 0 0 0 1px var(--ruby), 0 6px 20px rgba(0, 0, 0, 0.7);
+}
+.netbar small { color: var(--muted); }
+.netbar__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ruby); animation: wait-pulse 1.2s ease-in-out infinite; }
+
+@media (max-height: 520px) {
+  .lobby__box { gap: 8px; padding: 14px 18px; }
+  .lobby h1 { font-size: 24px; }
+  .lobby__share, .online-panel > .btn:not(.btn--small) { padding: 8px; font-size: 15px; }
+  .netbar { font-size: 12px; padding: 4px 10px; }
+  .netbar small { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lobby__spinner, .status__wait, .netbar__dot { animation: none; }
+}

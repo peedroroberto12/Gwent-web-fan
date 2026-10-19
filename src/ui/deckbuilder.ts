@@ -30,6 +30,7 @@ import { musicButton, onMusicChange, toggleMusic } from './music';
 import { playCard } from './sfx';
 import { enablePeek, justPeeked } from './peek';
 import { fullscreenButton, goFullscreen } from './mobile';
+import { normalizeRoom } from '../net/match';
 
 export interface SideConfig {
   faction: Faction;
@@ -139,8 +140,21 @@ const ui = {
   flash: null as { grid: 'collection' | 'deck'; id: string } | null,
 };
 
+/** O que fazer com o baralho pronto. */
+export interface DeckActions {
+  cpu(setup: MatchSetup): void;
+  /** Criar uma sala online com o seu baralho. */
+  host(me: SideConfig): void;
+  /** Entrar numa sala online. */
+  join(me: SideConfig, room: string): void;
+  /** Abriu pelo link de uma sala: a tela vira "escolha o baralho e entre". */
+  room: string | null;
+}
+
 let root: HTMLElement;
-let onStart: (setup: MatchSetup) => void;
+let actions: DeckActions;
+let onlinePanel = false;
+let joinError = '';
 
 function change(fn: (s: SavedSide, cfg: SideConfig) => void) {
   const cfg = side(ui.who);
@@ -227,7 +241,9 @@ function render() {
   const stats = deckStats(cfg.deck);
   const mine = deckProblems(side('me').deck, side('me').faction);
   const cpu = deckProblems(side('cpu').deck, side('cpu').faction);
-  const problems = [...mine.map((p) => `Você: ${p}`), ...cpu.map((p) => `CPU: ${p}`)];
+  const room = actions.room;
+  if (room) ui.who = 'me';
+  const problems = room ? mine.map((p) => `Você: ${p}`) : [...mine.map((p) => `Você: ${p}`), ...cpu.map((p) => `CPU: ${p}`)];
   const leaders = factionLeaders(cfg.faction);
 
   root.innerHTML = `
@@ -235,7 +251,7 @@ function render() {
       <header class="db__head">
         <div class="db__tabs">
           <button class="db__tab ${ui.who === 'me' ? 'is-active' : ''}" data-who="me">Seu baralho</button>
-          <button class="db__tab ${ui.who === 'cpu' ? 'is-active' : ''}" data-who="cpu">Baralho da CPU</button>
+          ${room ? '' : `<button class="db__tab ${ui.who === 'cpu' ? 'is-active' : ''}" data-who="cpu">Baralho da CPU</button>`}
         </div>
         <div class="db__faction">
           <button class="db__arrow" data-faction="-1" aria-label="Facção anterior">‹</button>
@@ -282,7 +298,11 @@ function render() {
           <button class="btn btn--ghost btn--small" data-action="clear">Esvaziar</button>
         </div>
         ${ui.presetNote ? `<p class="db__preset-note">${ui.presetNote}</p>` : ''}
-        <button class="btn db__start" data-action="start" ${problems.length ? 'disabled' : ''}>Começar partida</button>
+        ${room
+          ? `<button class="btn db__start" data-action="join" ${mine.length ? 'disabled' : ''}>Entrar na sala ${room}</button>
+             <button class="btn btn--ghost btn--small db__online" data-action="cpu-instead">Jogar contra a CPU</button>`
+          : `<button class="btn db__start" data-action="start" ${problems.length ? 'disabled' : ''}>Começar partida</button>
+             <button class="btn btn--ghost btn--small db__online" data-action="online" ${mine.length ? 'disabled' : ''}>Jogar online</button>`}
         ${problems.length ? `<ul class="db__problems">${problems.map((p) => `<li>${p}</li>`).join('')}</ul>` : ''}
         <div class="db__hover"></div>
       </section>
@@ -351,16 +371,64 @@ function render() {
   });
   root.querySelector('[data-action="clear"]')!.addEventListener('click', () =>
     change((s, c) => { s.decks[c.faction] = []; ui.presetNote = ''; }));
-  root.querySelector('[data-action="start"]')!.addEventListener('click', () => {
-    if (!problems.length) onStart(currentSetup());
+  root.querySelector('[data-action="start"]')?.addEventListener('click', () => {
+    if (!problems.length) actions.cpu(currentSetup());
   });
+  root.querySelector('[data-action="join"]')?.addEventListener('click', () => {
+    if (!mine.length && room) actions.join(side('me'), room);
+  });
+  root.querySelector('[data-action="cpu-instead"]')?.addEventListener('click', () => {
+    actions.room = null;
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    render();
+  });
+  root.querySelector('[data-action="online"]')?.addEventListener('click', () => { onlinePanel = true; joinError = ''; render(); });
+  if (onlinePanel && !room) renderOnlinePanel(mine.length > 0);
   root.querySelector('[data-action="music"]')?.addEventListener('click', toggleMusic);
   root.querySelector('[data-action="fullscreen"]')?.addEventListener('click', () => void goFullscreen().then(() => render()));
 }
 
-export function mountDeckBuilder(el: HTMLElement, start: (setup: MatchSetup) => void) {
+/** Janela "Jogar online": criar sala ou digitar o código de uma. */
+function renderOnlinePanel(blocked: boolean) {
+  const el = document.createElement('div');
+  el.className = 'modal';
+  el.innerHTML = `
+    <div class="modal__box online-panel">
+      <h2>Jogar online</h2>
+      <p class="modal__note">Crie uma sala e mande o link para um amigo. Vocês jogam direto, um contra o outro.</p>
+      <button class="btn" data-op="host" ${blocked ? 'disabled' : ''}>Criar sala</button>
+      <div class="online-panel__or"><span>ou entre com o código</span></div>
+      <form class="online-panel__join" data-op="join">
+        <input class="online-panel__code" name="code" maxlength="8" autocomplete="off" autocapitalize="characters"
+          spellcheck="false" placeholder="K7P2QX" aria-label="Código da sala">
+        <button class="btn btn--ghost" type="submit">Entrar</button>
+      </form>
+      ${joinError ? `<p class="online-panel__error">${joinError}</p>` : ''}
+      <button class="btn btn--ghost btn--small" data-op="close">Fechar</button>
+    </div>`;
+  root.append(el);
+  el.addEventListener('click', (ev) => { if (ev.target === el) { onlinePanel = false; render(); } });
+  el.querySelector('[data-op="close"]')!.addEventListener('click', () => { onlinePanel = false; render(); });
+  el.querySelector('[data-op="host"]')!.addEventListener('click', () => {
+    onlinePanel = false;
+    actions.host(side('me'));
+  });
+  el.querySelector<HTMLFormElement>('[data-op="join"]')!.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const code = normalizeRoom(new FormData(ev.target as HTMLFormElement).get('code')?.toString() ?? '');
+    if (!code) {
+      joinError = 'O código tem 6 letras/números, tipo K7P2QX.';
+      render();
+      return;
+    }
+    onlinePanel = false;
+    actions.join(side('me'), code);
+  });
+}
+
+export function mountDeckBuilder(el: HTMLElement, deckActions: DeckActions) {
   root = el;
-  onStart = start;
+  actions = deckActions;
   onMusicChange(() => render());
   render();
 }

@@ -11,6 +11,16 @@ Recriação gratuita do Gwent de *The Witcher 3*, jogável offline no navegador.
 - **No celular (Android e iPhone):** abra o link do GitHub Pages do repositório, gire o celular e jogue. Para virar "app", use **Adicionar à tela inicial**: abre em tela cheia e funciona offline depois da primeira vez. Segure o dedo numa carta para ver os detalhes.
 - **Sem instalar:** baixe o `gwent-web-...zip` do Release, extraia e abra o `index.html`.
 
+## Jogar online com um amigo
+
+No montador de baralho, toque em **Jogar online → Criar sala** e mande o link (ou o código de 6 letras) para o amigo. Ele abre o link, escolhe o baralho e entra.
+
+- A partida é **direta entre os dois aparelhos** (WebRTC via [Trystero](https://github.com/dmotz/trystero)). Relays públicos do Nostr só servem para os dois se encontrarem; não existe servidor do projeto.
+- Os dois rodam o mesmo motor de regras e trocam só as jogadas. A cada jogada vai junto uma impressão digital do estado, e se algo divergir o jogador 0 (quem criou a sala) manda a partida inteira para o outro.
+- Caiu a internet ou recarregou a página? Abra o mesmo link: a partida continua de onde parou.
+- 4G contra 4G pode não conectar em algumas operadoras (CGNAT). Com um dos dois no Wi-Fi costuma funcionar.
+- Para testar sozinho: abra `#rede=local` e use o link gerado em outra aba do mesmo navegador.
+
 ## Desenvolver
 
 Requer Node.js 22+.
@@ -30,6 +40,7 @@ src/
   engine/   motor de regras (lógica pura, sem DOM, 100% testável)
   data/     definições de cartas, facções e baralhos
   ai/       oponente controlado pelo computador
+  net/      partida online (conexão e protocolo)
   ui/       interface (tabuleiro, cartas, animações)
 tests/      testes do motor e da IA
 scripts/    utilitários (ex: baixar imagens das cartas)
@@ -51,7 +62,7 @@ Artes e dados vêm do repositório [API-Gwent](https://github.com/day-s-ea/API-G
 - Partida contra IA heurística
 - Desktop primeiro
 
-Depois: IA mais forte, Skellige, multiplayer.
+Depois: IA mais forte, Skellige.
 
 > Estado atual: motor de regras completo e testado (todas as habilidades de carta, os 20 líderes, as habilidades de facção, troca de 2 cartas na abertura e passe automático) e partida jogável contra a IA.
 

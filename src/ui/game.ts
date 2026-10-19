@@ -1,6 +1,7 @@
 // Interface da partida. Toda regra vem do motor (src/engine); aqui só desenhamos o
 // estado, traduzimos cliques/arrastes em jogadas e animamos os eventos.
-// Jogador 0 = você, jogador 1 = IA.
+// Contra a CPU você é o jogador 0. Online, quem criou a sala é o 0 e quem entrou é o 1,
+// mas cada um sempre se vê na parte de baixo da mesa.
 import { chooseMove } from '../ai/basic';
 import {
   ABILITY_NAMES,
@@ -37,9 +38,17 @@ import { enablePeek, justPeeked } from './peek';
 import { fullscreenButton, goFullscreen } from './mobile';
 import type { MatchSetup } from './deckbuilder';
 import { musicButton, onMusicChange, toggleMusic } from './music';
+import type { Failure, OnlineMatch, Status } from '../net/match';
 
-const ME: PlayerId = 0;
-const AI: PlayerId = 1;
+let ME: PlayerId = 0;
+let OP: PlayerId = 1;
+
+/** Partida online em andamento (null = contra a CPU). */
+let online: OnlineMatch | null = null;
+/** Jogadas do oponente que chegaram enquanto a tela ainda animava a anterior. */
+const remoteQueue: Move[] = [];
+let netStatus: Status = 'connected';
+let netFailure: Failure | null = null;
 const sideName = (p: PlayerId) => (p === ME ? 'me' : 'op');
 
 // ---------------------------------------------------------------- estado da interface
@@ -61,6 +70,7 @@ let onDecks: () => void = () => {};
 let session = 0;
 
 function newGame() {
+  if (online) return;
   session++;
   playCard('shuffle', 0.6);
   g = createGame({
@@ -71,6 +81,20 @@ function newGame() {
   ui.selected = null;
   ui.reveal = null;
   ui.log = g.turn === ME ? 'Você começa. Arraste uma carta até a fileira (ou clique nela).' : 'O oponente começa.';
+}
+
+/** Online: partida nova, retomada ou ressincronizada. Mostra o estado direto, sem animar. */
+function beginOnline(state: GameState) {
+  session++;
+  playCard('shuffle', 0.6);
+  g = state;
+  remoteQueue.length = 0;
+  ui.busy = false;
+  ui.selected = null;
+  ui.reveal = null;
+  ui.log = g.phase === 'play'
+    ? 'Partida retomada.'
+    : g.turn === ME ? 'Você começa. Arraste uma carta até a fileira (ou clique nela).' : 'O oponente começa.';
 }
 
 // ---------------------------------------------------------------- textos
@@ -112,7 +136,7 @@ function describe(events: GameEvent[]): string {
         break;
       }
       case 'game':
-        parts.push(e.winner === ME ? 'Vitória!' : e.winner === AI ? 'Derrota.' : 'Empate.');
+        parts.push(e.winner === ME ? 'Vitória!' : e.winner === OP ? 'Derrota.' : 'Empate.');
         break;
     }
   }
@@ -127,6 +151,13 @@ const myTurn = () => !ui.busy && g.winner === null && g.phase === 'play' && acto
 async function dispatch(move: Move, overrides?: Map<string, DOMRect>) {
   const mySession = session;
   const by = actor();
+  if (online && by === ME) {
+    try {
+      online.local(move); // confere e manda para o oponente antes de animar
+    } catch {
+      return;
+    }
+  }
   const { state, events } = applyMove(g, move);
   g = state;
   ui.lastActor = by;
@@ -203,10 +234,15 @@ function playEventSounds(events: GameEvent[]) {
 }
 
 function next() {
-  if (g.winner !== null || ui.reveal) return;
+  if (ui.busy || g.winner !== null || ui.reveal || actor() !== OP) return;
+  if (online) {
+    const m = remoteQueue.shift();
+    if (m) void dispatch(m);
+    return;
+  }
   const mySession = session;
   // a IA "pensa" um pouco antes de jogar, para o ritmo não ficar atropelado
-  if (actor() === AI) setTimeout(() => { if (mySession === session) void dispatch(chooseMove(g, AI)); }, 1300);
+  if (actor() === OP) setTimeout(() => { if (mySession === session) void dispatch(chooseMove(g, OP)); }, 1300);
 }
 
 // ---------------------------------------------------------------- alvos de jogada
@@ -226,7 +262,7 @@ function targetsFor(uid: number): Target[] {
     .map((m): Target => {
       if (m.target !== undefined) return { kind: 'card', uid: m.target, move: m };
       if (m.row && (d.type === 'unit' || d.type === 'hero'))
-        return { kind: 'row', side: d.abilities.includes('spy') ? AI : ME, row: m.row, move: m };
+        return { kind: 'row', side: d.abilities.includes('spy') ? OP : ME, row: m.row, move: m };
       if (m.row) return { kind: 'horn', row: m.row, move: m };
       return { kind: 'instant', move: m };
     });
@@ -389,7 +425,7 @@ const view = (c: CardInst, strength?: number) =>
 function playerPanel(p: PlayerId): string {
   const P = g.players[p];
   const gems = [0, 1].map((i) => `<span class="gem ${i < P.gems ? 'on' : ''}"></span>`).join('');
-  const lead = score(g, p) > score(g, p === ME ? AI : ME);
+  const lead = score(g, p) > score(g, p === ME ? OP : ME);
   return `
     <div class="player player--${sideName(p)} ${actor() === p && g.winner === null ? 'is-turn' : ''}">
       <div class="player__portrait" style="background-image:url('${getCard(P.leader).art}')"></div>
@@ -418,15 +454,15 @@ function render(overrides?: Map<string, DOMRect>) {
   root.innerHTML = `
     <div class="board faction-${g.players[ME].faction}">
       <aside class="left">
-        <div class="leader-slot leader-slot--op" data-leader="${AI}"></div>
-        ${playerPanel(AI)}
+        <div class="leader-slot leader-slot--op" data-leader="${OP}"></div>
+        ${playerPanel(OP)}
         <div class="weather" title="Clima"></div>
         ${playerPanel(ME)}
         <div class="leader-slot leader-slot--me" data-leader="${ME}"></div>
       </aside>
       <section class="field ${targets[0]?.kind === 'instant' ? 'is-instant-target' : ''}">
         <div class="rows rows--op"></div>
-        <div class="status"><span>Rodada ${g.round}</span>${ui.log}</div>
+        <div class="status"><span>Rodada ${g.round}</span>${ui.log}${waitHint()}</div>
         <div class="rows rows--me"></div>
         <div class="hand"></div>
       </section>
@@ -437,18 +473,21 @@ function render(overrides?: Map<string, DOMRect>) {
         <div class="actions">
           <button class="btn btn--pass" data-action="pass" ${myTurn() && !g.pending ? '' : 'disabled'}>Passar</button>
           <div class="actions__row">
-            <button class="btn btn--ghost btn--small btn--icon" data-action="restart" title="Recomeçar">↻<span class="lbl"> Recomeçar</span></button>
-            <button class="btn btn--ghost btn--small btn--icon" data-action="decks" title="Baralhos">☰<span class="lbl"> Baralhos</span></button>
+            ${online ? '' : '<button class="btn btn--ghost btn--small btn--icon" data-action="restart" title="Recomeçar">↻<span class="lbl"> Recomeçar</span></button>'}
+            ${online
+              ? '<button class="btn btn--ghost btn--small btn--icon" data-action="decks" title="Sair da sala">✕<span class="lbl"> Sair</span></button>'
+              : '<button class="btn btn--ghost btn--small btn--icon" data-action="decks" title="Baralhos">☰<span class="lbl"> Baralhos</span></button>'}
             ${musicButton()}
             ${sfxButton()}
             ${fullscreenButton()}
           </div>
         </div>
       </aside>
-    </div>`;
+    </div>
+    ${netBar()}`;
 
   // líderes (o seu é clicável quando a habilidade está disponível)
-  for (const p of [AI, ME]) {
+  for (const p of [OP, ME]) {
     const P = g.players[p];
     const el = hoverable(cardView(getCard(P.leader)), getCard(P.leader));
     if (P.leaderUsed) el.classList.add('is-used');
@@ -464,7 +503,7 @@ function render(overrides?: Map<string, DOMRect>) {
   g.weather.forEach((c) => w.append(view(c)));
 
   const order: Record<'op' | 'me', Row[]> = { op: ['siege', 'ranged', 'close'], me: ['close', 'ranged', 'siege'] };
-  for (const p of [AI, ME]) {
+  for (const p of [OP, ME]) {
     const box = root.querySelector(`.rows--${sideName(p)}`)!;
     for (const row of order[sideName(p)]) {
       const P = g.players[p];
@@ -512,7 +551,7 @@ function render(overrides?: Map<string, DOMRect>) {
     hand.append(el);
   }
 
-  for (const p of [AI, ME]) {
+  for (const p of [OP, ME]) {
     const P = g.players[p];
     const top = P.discard[P.discard.length - 1];
     const piles = root.querySelector(`.piles--${sideName(p)}`)!;
@@ -528,10 +567,12 @@ function render(overrides?: Map<string, DOMRect>) {
   renderOverlays();
 
   root.querySelector('[data-action="pass"]')!.addEventListener('click', () => { if (myTurn()) void dispatch({ type: 'pass' }); });
-  root.querySelector('[data-action="restart"]')!.addEventListener('click', () => { newGame(); render(); next(); });
+  root.querySelector('[data-action="restart"]')?.addEventListener('click', () => { newGame(); render(); next(); });
   root.querySelector('[data-action="music"]')?.addEventListener('click', toggleMusic);
   root.querySelector('[data-action="sfx"]')!.addEventListener('click', () => { toggleSfx(); render(); });
-  root.querySelector('[data-action="decks"]')!.addEventListener('click', leave);
+  root.querySelector('[data-action="decks"]')!.addEventListener('click', () => {
+    if (!online || g.winner !== null || confirm('Sair da partida online? O oponente vai ser avisado.')) leaveRoom();
+  });
   root.querySelector('[data-action="fullscreen"]')?.addEventListener('click', () => void goFullscreen().then(() => render()));
 
   fitAll(); // antes de animar, para as posições finais já estarem certas
@@ -581,6 +622,7 @@ function bindResize() {
 
 /** Escolhas (médico, roubar descarte...), cartas reveladas e fim de jogo. */
 function renderOverlays() {
+  if (online && (netFailure || netStatus === 'gone')) return netModal();
   if (ui.busy) return;
 
   if (ui.reveal) {
@@ -597,7 +639,7 @@ function renderOverlays() {
     el.querySelector('.modal__cards')!.remove();
     const row = document.createElement('div');
     row.className = 'modal__buttons';
-    for (const [label, p] of [['Eu começo', ME], ['Oponente começa', AI]] as const) {
+    for (const [label, p] of [['Eu começo', ME], ['Oponente começa', OP]] as const) {
       const b = document.createElement('button');
       b.className = 'btn';
       b.textContent = label;
@@ -657,19 +699,29 @@ function renderOverlays() {
   }
 
   if (g.winner !== null) {
-    const title = g.winner === ME ? 'Vitória!' : g.winner === AI ? 'Derrota' : 'Empate';
+    const title = g.winner === ME ? 'Vitória!' : g.winner === OP ? 'Derrota' : 'Empate';
     const el = modal(title, '');
     el.classList.add('modal--end');
     const res = g.roundWinners.map((w, i) => `<li>Rodada ${i + 1}: ${w === 'draw' ? 'empate' : w === ME ? 'você' : 'oponente'}</li>`).join('');
     el.querySelector('.modal__cards')!.outerHTML = `<ul class="modal__rounds">${res}</ul>`;
     const again = document.createElement('button');
     again.className = 'btn';
-    again.textContent = 'Jogar de novo';
-    again.addEventListener('click', () => { newGame(); render(); next(); });
     const decks = document.createElement('button');
     decks.className = 'btn btn--ghost';
-    decks.textContent = 'Montar baralho';
-    decks.addEventListener('click', leave);
+    if (online) {
+      const m = online;
+      again.textContent = m.rematchOffer ? 'Aceitar revanche' : m.waitingRematch ? 'Esperando o oponente…' : 'Revanche';
+      again.disabled = m.waitingRematch;
+      again.addEventListener('click', () => { m.rematch(); render(); });
+      if (m.rematchOffer) el.querySelector('.modal__box h2')!.insertAdjacentHTML('afterend', '<p class="modal__note">O oponente quer revanche!</p>');
+      decks.textContent = 'Sair da sala';
+      decks.addEventListener('click', leaveRoom);
+    } else {
+      again.textContent = 'Jogar de novo';
+      again.addEventListener('click', () => { newGame(); render(); next(); });
+      decks.textContent = 'Montar baralho';
+      decks.addEventListener('click', leave);
+    }
     const row = document.createElement('div');
     row.className = 'modal__buttons';
     row.append(again, decks);
@@ -690,6 +742,47 @@ function modal(title: string, hint?: string): HTMLElement {
   return el;
 }
 
+/** Texto de espera na barra de status quando é a vez do oponente online. */
+function waitHint(): string {
+  if (!online || g.winner !== null || ui.busy || actor() !== OP) return '';
+  const t = g.phase === 'redraw' ? 'Oponente trocando cartas…'
+    : g.phase === 'first' ? 'Oponente escolhendo quem começa…'
+    : g.pending ? 'Oponente escolhendo uma carta…'
+    : 'Vez do oponente…';
+  return `<em class="status__wait">${t}</em>`;
+}
+
+/** Faixa no topo quando a conexão com o oponente caiu. */
+function netBar(): string {
+  if (!online || netStatus === 'connected' || netStatus === 'gone' || netFailure) return '';
+  return `<div class="netbar"><span class="netbar__dot"></span>Oponente desconectado. Esperando ele voltar…
+    <small>Se ele fechou o jogo, é só abrir o link da sala de novo.</small></div>`;
+}
+
+const FAILURES: Record<Failure, [string, string]> = {
+  version: ['Versões diferentes', 'Vocês estão com versões diferentes do jogo. Os dois precisam recarregar a página (ou atualizar o app) e abrir o link de novo.'],
+  full: ['Sala cheia', 'Essa sala já tem dois jogadores.'],
+  invalid: ['Problema na partida', 'Recebemos dados inválidos do oponente. Criem uma sala nova.'],
+};
+
+function netModal() {
+  const [title, text] = netFailure ? FAILURES[netFailure] : ['O oponente saiu', 'Ele saiu da sala. Crie uma sala nova para jogar de novo.'];
+  const el = modal(title, '');
+  el.querySelector('.modal__cards')!.outerHTML = `<p class="modal__note">${text}</p>`;
+  const back = document.createElement('button');
+  back.className = 'btn';
+  back.textContent = 'Voltar';
+  back.addEventListener('click', leaveRoom);
+  el.querySelector('.modal__box')!.append(back);
+}
+
+function leaveRoom() {
+  online?.leave();
+  online = null;
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  leave();
+}
+
 function leave() {
   session++; // cancela animações e a vez da IA em andamento
   ui.busy = false;
@@ -702,8 +795,35 @@ export function mountGame(el: HTMLElement, matchSetup: MatchSetup, backToDecks: 
   bindResize();
   setup = matchSetup;
   onDecks = backToDecks;
+  online = null;
+  ME = 0;
+  OP = 1;
   newGame();
   onMusicChange(() => { if (!ui.busy && !drag) render(); });
+  render();
+  next();
+}
+
+/** Partida online já começada (o lobby chama quando os dois baralhos chegaram). */
+export function mountOnline(el: HTMLElement, match: OnlineMatch, backToDecks: () => void) {
+  root = el;
+  bindResize();
+  onDecks = backToDecks;
+  online = match;
+  ME = match.me;
+  OP = ME === 0 ? 1 : 0;
+  netStatus = match.status;
+  netFailure = null;
+  const calm = () => !ui.busy && !drag;
+  match.on = {
+    status: (st) => { netStatus = st; if (calm()) render(); },
+    begin: (st) => { beginOnline(st); render(); next(); },
+    remote: (m) => { remoteQueue.push(m); next(); },
+    rematch: () => { if (calm()) render(); },
+    fail: (why) => { netFailure = why; ui.busy = false; render(); },
+  };
+  beginOnline(match.state!);
+  onMusicChange(() => { if (calm()) render(); });
   render();
   next();
 }
