@@ -60,10 +60,7 @@ Artes e dados vêm do repositório [API-Gwent](https://github.com/day-s-ea/API-G
 - Montagem de baralho antes da partida, para você e para a CPU (mínimo 22 unidades, máximo 10 especiais)
 - 2 baralhos prontos por facção, inspirados nas estratégias clássicas da comunidade, e opção de baralho aleatório
 - Partida contra IA heurística
-- Desktop primeiro
-
-Depois: IA mais forte, Skellige.
-
+  
 > Estado atual: motor de regras completo e testado (todas as habilidades de carta, os 20 líderes, as habilidades de facção, troca de 2 cartas na abertura e passe automático) e partida jogável contra a IA.
 
 ## Música de fundo
